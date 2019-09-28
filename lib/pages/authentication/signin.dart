@@ -1,0 +1,45 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hospital_finder/config/size_config.dart';
+import 'package:hospital_finder/utils/HFscaffold.dart';
+import 'package:hospital_finder/universal/auth_button.dart';
+
+class SignIn extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return HFscaffold(
+      title: "Sign In",
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            AuthButton(
+              text: "Sign in with Google",
+              icon: Icon(
+                FontAwesomeIcons.google,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                print("Google");
+              },
+              color: Colors.red,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            AuthButton(
+              text: "Sign in with Facebook",
+              icon: Icon(
+                FontAwesomeIcons.facebook,
+                color: Colors.indigo[800],
+              ),
+              onPressed: () => print("Facebook"),
+              color: Colors.indigo[800],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
