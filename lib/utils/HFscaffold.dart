@@ -25,8 +25,8 @@ class HFscaffold extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   configBloc.darkOn
-                      ? FontAwesomeIcons.lightbulb
-                      : FontAwesomeIcons.solidLightbulb,
+                      ? FontAwesomeIcons.moon
+                      : FontAwesomeIcons.solidMoon,
                   size: 18,
                 ),
                 onPressed: () {
