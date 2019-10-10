@@ -26,6 +26,29 @@ class _DashboardState extends State<Dashboard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Icon(
+                        Icons.my_location,
+                        size: SizeConfig.safeBlockHorizontal * 4,
+                      ),
+                      SizedBox(
+                        width: SizeConfig.blockSizeHorizontal * 2,
+                      ),
+                      Text("Gurugram, Haryana"),
+                      SizedBox(
+                        width: SizeConfig.blockSizeHorizontal * 2,
+                      ),
+                      Icon(
+                        Icons.edit,
+                        size: SizeConfig.safeBlockHorizontal * 4,
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 2,
+                  ),
                   Text(
                     "What are you looking for ?",
                     style: TextStyle(
@@ -46,75 +69,75 @@ class _DashboardState extends State<Dashboard> {
                           color: Colors.red,
                         ),
                         SearchCard(
-                          text: "Search Doctors",
-                          onTap: () {},
-                          color: Colors.blue,
-                        ),
-                        SearchCard(
                           text: "Search Blood Banks",
                           onTap: () {},
                           color: Colors.teal,
-                        ),
-                        SearchCard(
-                          text: "Search Specialization",
-                          onTap: () {},
-                          color: Colors.purple[600],
                         ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: SizeConfig.blockSizeVertical * 2,
+                    height: SizeConfig.blockSizeVertical * 5,
                   ),
                   Text(
-                    "Find doctors in top specialities",
+                    "Best Hospitals nearby you",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: SizeConfig.blockSizeHorizontal * 3.8),
                   ),
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 2,
-                  ),
                 ],
               ),
             ),
-            Container(
-              height: SizeConfig.blockSizeVertical * 25,
-              padding: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.blockSizeHorizontal * 5),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                physics: ClampingScrollPhysics(),
-                children: <Widget>[
-                  SpecialityCard(
-                    onTap: () {},
-                    text: "Dentist",
-                  ),
-                  SpecialityCard(
-                    onTap: () {},
-                    text: "Dentist",
-                  ),
-                  SpecialityCard(
-                    onTap: () {},
-                    text: "Dentist",
-                  ),
-                  SpecialityCard(
-                    onTap: () {},
-                    text: "Dentist",
-                  ),
-                  SpecialityCard(
-                    onTap: () {},
-                    text: "Dentist",
-                  ),
-                  SpecialityCard(
-                    onTap: () {},
-                    text: "Dentist",
-                  ),
-                  SpecialityCard(
-                    onTap: () {},
-                    text: "Dentist",
-                  ),
-                ],
+            SafeArea(
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 25,
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.blockSizeHorizontal * 5),
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  physics: ClampingScrollPhysics(),
+                  children: <Widget>[
+                    HospitalCard(
+                      onTap: () {},
+                      text: "Hospital 1",
+                      distance: 1.2,
+                    ),
+                    HospitalCard(
+                      onTap: () {},
+                      text: "Hospital 2",
+                      distance: 2.1,
+                    ),
+                    HospitalCard(
+                      onTap: () {},
+                      text: "Hospital 3",
+                      distance: 2.8,
+                    ),
+                    HospitalCard(
+                      onTap: () {},
+                      text: "Hospital 4",
+                      distance: 4.2,
+                    ),
+                    HospitalCard(
+                      onTap: () {},
+                      text: "Hospital 5",
+                      distance: 7.6,
+                    ),
+                    Container(
+                      height: SizeConfig.blockSizeVertical * 40,
+                      width: SizeConfig.blockSizeHorizontal * 40,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.arrow_forward_ios),
+                            onPressed: () {},
+                          ),
+                          Text("See more")
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           ],
@@ -172,52 +195,74 @@ class SearchCard extends StatelessWidget {
   }
 }
 
-class SpecialityCard extends StatelessWidget {
+class HospitalCard extends StatelessWidget {
   final Function onTap;
   final String text;
+  final double distance;
 
-  const SpecialityCard({Key key, this.onTap, this.text}) : super(key: key);
+  const HospitalCard({Key key, this.onTap, this.text, this.distance})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
-    return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: SizeConfig.blockSizeHorizontal * 2),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: Ink(
-          height: SizeConfig.blockSizeVertical * 30,
-          width: SizeConfig.blockSizeHorizontal * 30,
-          decoration: BoxDecoration(
-            color:
-                configBloc.darkOn ? Tools.hexToColor("#1f2124") : Colors.white,
+    return Stack(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.blockSizeHorizontal * 2),
+          child: InkWell(
             borderRadius: BorderRadius.circular(8),
-            boxShadow: !configBloc.darkOn
-                ? [
-                    BoxShadow(
-                      color: Colors.grey[200],
-                      blurRadius: 10,
-                      spreadRadius: 5,
-                    )
-                  ]
-                : null,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                Icons.account_circle,
+            onTap: onTap,
+            child: Ink(
+              height: SizeConfig.blockSizeVertical * 40,
+              width: SizeConfig.blockSizeHorizontal * 40,
+              decoration: BoxDecoration(
+                color: configBloc.darkOn
+                    ? Tools.hexToColor("#1f2124")
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: !configBloc.darkOn
+                    ? [
+                        BoxShadow(
+                          color: Colors.grey[200],
+                          blurRadius: 10,
+                          spreadRadius: 5,
+                        )
+                      ]
+                    : null,
               ),
-              SizedBox(
-                height: 10,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 3,
+                  ),
+                  Icon(
+                    Icons.local_hospital,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(text)
+                ],
               ),
-              Text(text)
-            ],
+            ),
           ),
         ),
-      ),
+        Positioned(
+          bottom: SizeConfig.blockSizeVertical * 40 / 100,
+          left: SizeConfig.blockSizeHorizontal * 40 / 2.8,
+          child: Chip(
+            label: Text(
+              "$distance km",
+              style: TextStyle(fontSize: SizeConfig.safeBlockHorizontal * 3),
+            ),
+            backgroundColor: configBloc.darkOn ? Colors.red : Colors.blue[100],
+            elevation: 8,
+          ),
+        ),
+      ],
     );
   }
 }

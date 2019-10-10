@@ -33,7 +33,7 @@ class _ConfigPageState extends State<ConfigPage> {
           elevation: 10.0,
         ),
       ),
-      home: SignIn(),
+      home: Dashboard(),
       routes: {
         SignIn.routeName: (context) => SignIn(),
         Dashboard.routeName: (context) => Dashboard()
