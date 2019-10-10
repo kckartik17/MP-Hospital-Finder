@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/config_notifier.dart';
+import 'package:hospital_finder/notifiers/location_notifier.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
+    LocationBloc locationBloc = Provider.of<LocationBloc>(context);
     SizeConfig().init(context);
     return HFscaffold(
       title: "Dashboard",
@@ -26,25 +29,28 @@ class _DashboardState extends State<Dashboard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Icon(
-                        Icons.my_location,
-                        size: SizeConfig.safeBlockHorizontal * 4,
-                      ),
-                      SizedBox(
-                        width: SizeConfig.blockSizeHorizontal * 2,
-                      ),
-                      Text("Gurugram, Haryana"),
-                      SizedBox(
-                        width: SizeConfig.blockSizeHorizontal * 2,
-                      ),
-                      Icon(
-                        Icons.edit,
-                        size: SizeConfig.safeBlockHorizontal * 4,
-                      )
-                    ],
+                  InkWell(
+                    onTap: () => locationBloc.getLocation(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Icon(
+                          Icons.my_location,
+                          size: SizeConfig.safeBlockHorizontal * 4,
+                        ),
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 2,
+                        ),
+                        Text(locationBloc.location),
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 2,
+                        ),
+                        Icon(
+                          Icons.edit,
+                          size: SizeConfig.safeBlockHorizontal * 4,
+                        )
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 2,
@@ -130,7 +136,12 @@ class _DashboardState extends State<Dashboard> {
                         children: <Widget>[
                           IconButton(
                             icon: Icon(Icons.arrow_forward_ios),
-                            onPressed: () {},
+                            onPressed: () {
+                              Fluttertoast.showToast(
+                                  msg: "See More",
+                                  gravity: ToastGravity.BOTTOM,
+                                  toastLength: Toast.LENGTH_LONG);
+                            },
                           ),
                           Text("See more")
                         ],
