@@ -252,7 +252,7 @@ class HospitalCard extends StatelessWidget {
         ),
         Positioned(
           bottom: SizeConfig.blockSizeVertical * 40 / 100,
-          left: SizeConfig.blockSizeHorizontal * 40 / 2.8,
+          left: SizeConfig.blockSizeHorizontal * 40 / 2.7,
           child: Chip(
             label: Text(
               "$distance km",
