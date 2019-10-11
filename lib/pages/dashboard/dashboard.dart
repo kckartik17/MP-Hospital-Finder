@@ -7,7 +7,6 @@ import 'package:hospital_finder/notifiers/location_notifier.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
 
 class Dashboard extends StatefulWidget {
   static const String routeName = "/dashboard";
