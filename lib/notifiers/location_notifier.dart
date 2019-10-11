@@ -5,9 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class LocationBloc with ChangeNotifier {
   var _loc = Location();
-  String _location = "Unknown Location";
-
-  String get location => _location;
+  String location = "Unknown Location";
 
   void getLocation() async {
     try {
@@ -19,8 +17,9 @@ class LocationBloc with ChangeNotifier {
               new Coordinates(userLocation.latitude, userLocation.longitude);
           var addresses =
               await Geocoder.local.findAddressesFromCoordinates(coordinates);
-          _location =
+          location =
               addresses.first.addressLine.toString().substring(0, 40) + " ....";
+          notifyListeners();
         } else {
           Fluttertoast.showToast(
               msg: "Unable to access the location",
@@ -35,7 +34,5 @@ class LocationBloc with ChangeNotifier {
           gravity: ToastGravity.CENTER,
           toastLength: Toast.LENGTH_LONG);
     }
-
-    notifyListeners();
   }
 }

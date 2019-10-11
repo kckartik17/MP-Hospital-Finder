@@ -7,6 +7,7 @@ import 'package:hospital_finder/notifiers/location_notifier.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 
 class Dashboard extends StatefulWidget {
   static const String routeName = "/dashboard";
@@ -96,9 +97,12 @@ class _DashboardState extends State<Dashboard> {
             ),
             SafeArea(
               child: Container(
-                height: SizeConfig.blockSizeVertical * 25,
-                padding: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.blockSizeHorizontal * 5),
+                height: SizeConfig.blockSizeVertical * 30,
+                padding: EdgeInsets.only(
+                  left: SizeConfig.blockSizeHorizontal * 5,
+                  right: SizeConfig.blockSizeHorizontal * 5,
+                  bottom: SizeConfig.blockSizeHorizontal * 3,
+                ),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   physics: ClampingScrollPhysics(),
@@ -220,8 +224,11 @@ class HospitalCard extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: SizeConfig.blockSizeHorizontal * 2),
+          padding: EdgeInsets.only(
+            left: SizeConfig.blockSizeHorizontal * 2,
+            right: SizeConfig.blockSizeHorizontal * 2,
+            bottom: SizeConfig.blockSizeHorizontal * 3.5,
+          ),
           child: InkWell(
             borderRadius: BorderRadius.circular(8),
             onTap: onTap,
@@ -262,15 +269,19 @@ class HospitalCard extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: SizeConfig.blockSizeVertical * 40 / 100,
+          bottom: -SizeConfig.blockSizeHorizontal * 1,
           left: SizeConfig.blockSizeHorizontal * 40 / 2.7,
-          child: Chip(
-            label: Text(
-              "$distance km",
-              style: TextStyle(fontSize: SizeConfig.safeBlockHorizontal * 3),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Chip(
+              label: Text(
+                "$distance km",
+                style: TextStyle(fontSize: SizeConfig.safeBlockHorizontal * 3),
+              ),
+              backgroundColor:
+                  configBloc.darkOn ? Colors.red : Colors.blue[100],
+              elevation: 8,
             ),
-            backgroundColor: configBloc.darkOn ? Colors.red : Colors.blue[100],
-            elevation: 8,
           ),
         ),
       ],
