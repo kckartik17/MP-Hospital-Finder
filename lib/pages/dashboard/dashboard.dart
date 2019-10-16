@@ -25,32 +25,41 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 5),
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.blockSizeHorizontal * 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  InkWell(
-                    onTap: () => locationBloc.getLocation(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Icon(
-                          Icons.my_location,
-                          size: SizeConfig.safeBlockHorizontal * 4,
-                        ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        Text(locationBloc.location),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        Icon(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Icon(
+                        Icons.my_location,
+                        size: SizeConfig.safeBlockHorizontal * 4,
+                      ),
+                      SizedBox(
+                        width: SizeConfig.blockSizeHorizontal * 2,
+                      ),
+                      InkWell(
+                        onTap: () => Fluttertoast.showToast(
+                            msg: locationBloc.location,
+                            gravity: ToastGravity.BOTTOM,
+                            toastLength: Toast.LENGTH_LONG),
+                        child: Text(
+                            locationBloc.location.toString().substring(0, 40) +
+                                "..."),
+                      ),
+                      SizedBox(
+                        width: SizeConfig.blockSizeHorizontal * 2,
+                      ),
+                      IconButton(
+                        icon: Icon(
                           Icons.edit,
                           size: SizeConfig.safeBlockHorizontal * 4,
-                        )
-                      ],
-                    ),
+                        ),
+                        onPressed: () => locationBloc.getLocation(),
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 2,
@@ -91,6 +100,9 @@ class _DashboardState extends State<Dashboard> {
                         fontWeight: FontWeight.bold,
                         fontSize: SizeConfig.blockSizeHorizontal * 3.8),
                   ),
+                  SizedBox(
+                    height: SizeConfig.blockSizeVertical * 2,
+                  ),
                 ],
               ),
             ),
@@ -98,8 +110,8 @@ class _DashboardState extends State<Dashboard> {
               child: Container(
                 height: SizeConfig.blockSizeVertical * 30,
                 padding: EdgeInsets.only(
-                  left: SizeConfig.blockSizeHorizontal * 5,
-                  right: SizeConfig.blockSizeHorizontal * 5,
+                  left: SizeConfig.blockSizeHorizontal * 2,
+                  right: SizeConfig.blockSizeHorizontal * 2,
                   bottom: SizeConfig.blockSizeHorizontal * 3,
                 ),
                 child: ListView(
