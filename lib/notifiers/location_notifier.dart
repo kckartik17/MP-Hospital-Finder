@@ -18,7 +18,7 @@ class LocationBloc with ChangeNotifier {
           var addresses =
               await Geocoder.local.findAddressesFromCoordinates(coordinates);
           location = addresses.first.addressLine;
-          ;
+
           notifyListeners();
         } else {
           Fluttertoast.showToast(
