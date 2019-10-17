@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hospital_finder/notifiers/config_notifier.dart';
 import 'package:hospital_finder/pages/authentication/signin.dart';
 import 'package:hospital_finder/pages/dashboard/dashboard.dart';
 import 'package:hospital_finder/utils/hf.dart';
 import 'package:provider/provider.dart';
+import 'package:hospital_finder/notifiers/index.dart';
 
 class ConfigPage extends StatefulWidget {
   static const String routeName = "/";
