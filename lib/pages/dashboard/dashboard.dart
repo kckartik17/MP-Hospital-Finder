@@ -44,9 +44,12 @@ class _DashboardState extends State<Dashboard> {
                             msg: locationBloc.location,
                             gravity: ToastGravity.BOTTOM,
                             toastLength: Toast.LENGTH_LONG),
-                        child: Text(
-                            locationBloc.location.toString().substring(0, 40) +
-                                " ..."),
+                        child: locationBloc.location.length > 40
+                            ? Text(locationBloc.location
+                                    .toString()
+                                    .substring(0, 40) +
+                                " ....")
+                            : Text(locationBloc.location),
                       ),
                       SizedBox(
                         width: SizeConfig.blockSizeHorizontal * 2,
