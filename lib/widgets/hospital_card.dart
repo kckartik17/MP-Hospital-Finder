@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/widgets/divider.dart';
 import 'package:provider/provider.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/utils/tools.dart';
@@ -47,17 +48,23 @@ class HospitalCard extends StatelessWidget {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 3,
+                  Container(
+                    margin: EdgeInsets.zero,
+                    height: SizeConfig.blockSizeVertical * 13,
+                    width: double.infinity,
+                    decoration: BoxDecoration(color: Colors.white),
                   ),
-                  Icon(
-                    Icons.local_hospital,
+                  CustomizedDivider(
+                    width: 1.0,
                   ),
-                  SizedBox(
-                    height: 10,
+                  Padding(
+                    padding: EdgeInsets.all(
+                      SizeConfig.blockSizeHorizontal * 2,
+                    ),
+                    child: Text(text),
                   ),
-                  Text(text)
                 ],
               ),
             ),
