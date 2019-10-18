@@ -54,7 +54,11 @@ class HospitalCard extends StatelessWidget {
                     margin: EdgeInsets.zero,
                     height: SizeConfig.blockSizeVertical * 13,
                     width: double.infinity,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/background.jpg"),
+                          fit: BoxFit.cover),
+                    ),
                   ),
                   CustomizedDivider(
                     width: 1.0,
