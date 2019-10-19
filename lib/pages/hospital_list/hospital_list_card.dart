@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_finder/config/size_config.dart';
-import 'package:hospital_finder/notifiers/config_notifier.dart';
+import 'package:hospital_finder/notifiers/index.dart';
 import 'package:provider/provider.dart';
 
 class HospitalListCard extends StatefulWidget {
