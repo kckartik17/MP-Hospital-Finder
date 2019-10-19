@@ -26,26 +26,31 @@ class _HospitalListState extends State<HospitalList> {
         backgroundColor: configBloc.darkOn ? Colors.grey[700] : Colors.white,
         foregroundColor: configBloc.darkOn ? Colors.white : Colors.black,
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: CustomScrollView(
-              scrollDirection: Axis.vertical,
-              slivers: <Widget>[
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.blockSizeHorizontal * 10,
-                      vertical: SizeConfig.blockSizeVertical * 2),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                        (context, index) => HospitalListCard(),
-                        childCount: 5),
-                  ),
-                )
-              ],
+      body: Container(
+        decoration: BoxDecoration(
+          color: configBloc.darkOn ? Colors.black : Colors.purple[200],
+        ),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: CustomScrollView(
+                scrollDirection: Axis.vertical,
+                slivers: <Widget>[
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.blockSizeHorizontal * 5,
+                        vertical: SizeConfig.blockSizeVertical * 2),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                          (context, index) => HospitalListCard(),
+                          childCount: 5),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
