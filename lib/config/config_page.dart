@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/pages/authentication/signin.dart';
 import 'package:hospital_finder/pages/dashboard/dashboard.dart';
+import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/hf.dart';
 import 'package:provider/provider.dart';
 import 'package:hospital_finder/notifiers/index.dart';
@@ -36,7 +37,8 @@ class _ConfigPageState extends State<ConfigPage> {
       home: Dashboard(),
       routes: {
         SignIn.routeName: (context) => SignIn(),
-        Dashboard.routeName: (context) => Dashboard()
+        Dashboard.routeName: (context) => Dashboard(),
+        HospitalList.routeName: (context) => HospitalList()
       },
     );
   }

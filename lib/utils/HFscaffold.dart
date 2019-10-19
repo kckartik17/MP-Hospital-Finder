@@ -7,8 +7,10 @@ import 'package:provider/provider.dart';
 class HFscaffold extends StatelessWidget {
   final String title;
   final Widget body;
+  final FloatingActionButton fab;
 
-  const HFscaffold({Key key, this.title, this.body}) : super(key: key);
+  const HFscaffold({Key key, this.title, this.body, this.fab})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
@@ -68,6 +70,9 @@ class HFscaffold extends StatelessWidget {
             ),
           ),
           body: body,
+          floatingActionButton: fab ?? null,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/widgets/hospital_card.dart';
 import 'package:hospital_finder/widgets/search_card.dart';
@@ -154,12 +155,8 @@ class _DashboardState extends State<Dashboard> {
                         children: <Widget>[
                           IconButton(
                             icon: Icon(Icons.arrow_forward_ios),
-                            onPressed: () {
-                              Fluttertoast.showToast(
-                                  msg: "See More",
-                                  gravity: ToastGravity.BOTTOM,
-                                  toastLength: Toast.LENGTH_LONG);
-                            },
+                            onPressed: () => Navigator.pushNamed(
+                                context, HospitalList.routeName),
                           ),
                           Text("See more")
                         ],
