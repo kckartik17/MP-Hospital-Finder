@@ -67,7 +67,17 @@ class HospitalCard extends StatelessWidget {
                     padding: EdgeInsets.all(
                       SizeConfig.blockSizeHorizontal * 2,
                     ),
-                    child: Text(text),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(text),
+                        Text(
+                          "Gurugram, Haryana",
+                          style: TextStyle(
+                              fontSize: SizeConfig.safeBlockHorizontal * 2.5),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

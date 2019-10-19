@@ -91,7 +91,7 @@ class _HospitalListCardState extends State<HospitalListCard> {
                     ],
                   ),
                   SizedBox(
-                    height: SizeConfig.blockSizeVertical * 3.5,
+                    height: SizeConfig.blockSizeVertical * 4,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
