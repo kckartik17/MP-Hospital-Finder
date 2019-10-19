@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/config_notifier.dart';
+import 'package:hospital_finder/pages/maps/maps.dart';
 import 'package:provider/provider.dart';
 
 class HFscaffold extends StatelessWidget {
@@ -32,8 +33,15 @@ class HFscaffold extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                   )
                 : null,
-            centerTitle: true,
             actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Maps",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onPressed: () =>
+                    Navigator.pushNamed(context, HospitalListMap.routeName),
+              ),
               IconButton(
                 icon: Icon(
                   configBloc.darkOn
