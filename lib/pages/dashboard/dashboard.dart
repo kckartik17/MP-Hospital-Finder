@@ -3,10 +3,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/pages/dashboard/hospital_card.dart';
+import 'package:hospital_finder/pages/dashboard/search_card.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
-import 'package:hospital_finder/widgets/hospital_card.dart';
-import 'package:hospital_finder/widgets/search_card.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {

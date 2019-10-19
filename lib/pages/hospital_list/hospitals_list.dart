@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/pages/hospital_list/hospital_list_card.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +14,7 @@ class HospitalList extends StatefulWidget {
 class _HospitalListState extends State<HospitalList> {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     return HFscaffold(
       title: "Search Hospitals",
@@ -22,6 +25,27 @@ class _HospitalListState extends State<HospitalList> {
         icon: Icon(Icons.directions),
         backgroundColor: configBloc.darkOn ? Colors.grey[700] : Colors.white,
         foregroundColor: configBloc.darkOn ? Colors.white : Colors.black,
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: CustomScrollView(
+              scrollDirection: Axis.vertical,
+              slivers: <Widget>[
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.blockSizeHorizontal * 10,
+                      vertical: SizeConfig.blockSizeVertical * 2),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (context, index) => HospitalListCard(),
+                        childCount: 5),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
