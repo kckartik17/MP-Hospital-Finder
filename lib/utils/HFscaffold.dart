@@ -8,8 +8,10 @@ class HFscaffold extends StatelessWidget {
   final String title;
   final Widget body;
   final FloatingActionButton fab;
+  final bool drawerIcon;
 
-  const HFscaffold({Key key, this.title, this.body, this.fab})
+  const HFscaffold(
+      {Key key, this.title, this.body, this.fab, this.drawerIcon = false})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,14 @@ class HFscaffold extends StatelessWidget {
         bottom: false,
         child: Scaffold(
           appBar: AppBar(
-            automaticallyImplyLeading: true,
+            automaticallyImplyLeading: drawerIcon ?? false,
             title: Text(title),
+            leading: !drawerIcon
+                ? IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                : null,
             centerTitle: true,
             actions: <Widget>[
               IconButton(

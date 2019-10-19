@@ -21,6 +21,7 @@ class _DashboardState extends State<Dashboard> {
     LocationBloc locationBloc = Provider.of<LocationBloc>(context);
     SizeConfig().init(context);
     return HFscaffold(
+      drawerIcon: true,
       title: "Dashboard",
       body: SingleChildScrollView(
         child: Column(
