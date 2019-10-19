@@ -45,9 +45,9 @@ class _HospitalListCardState extends State<HospitalListCard> {
                     height: SizeConfig.blockSizeVertical * 3,
                   ),
                   Text(
-                    "Columbia Asia Hospital",
+                    "Chakraborty Multi Speciality Hospital",
                     style: TextStyle(
-                      fontSize: SizeConfig.safeBlockHorizontal * 4,
+                      fontSize: SizeConfig.safeBlockHorizontal * 3.5,
                     ),
                   ),
                   SizedBox(
