@@ -97,7 +97,7 @@ List<Hospital> hospitals = [
     email: null,
     website: null,
     specialities: null,
-    locationCoords: LatLng(11.8311681, 92.6586401),
+    locationCoords: LatLng(17.4274003, 78.4311174),
   ),
   Hospital(
     id: "4",
