@@ -248,8 +248,7 @@ class _HospitalListMapState extends State<HospitalListMap> {
             myLocationButtonEnabled: true,
             myLocationEnabled: true,
             initialCameraPosition: CameraPosition(
-                target: LatLng(37.42796133580664, -122.085749655962),
-                zoom: 14.0),
+                target: LatLng(28.5068374, 77.0485119), zoom: 14.0),
             onMapCreated: (GoogleMapController controller) {
               _controller = controller;
               isMapCreated = true;
