@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_finder/config/size_config.dart';
@@ -5,11 +6,20 @@ import 'package:hospital_finder/notifiers/index.dart';
 import 'package:provider/provider.dart';
 
 class HospitalListCard extends StatefulWidget {
+  final String name;
+  final String district;
+
+  const HospitalListCard({Key key, this.name, this.district}) : super(key: key);
   @override
-  _HospitalListCardState createState() => _HospitalListCardState();
+  _HospitalListCardState createState() =>
+      _HospitalListCardState(name, district);
 }
 
 class _HospitalListCardState extends State<HospitalListCard> {
+  final String name;
+  final String district;
+
+  _HospitalListCardState(this.name, this.district);
   @override
   Widget build(BuildContext context) {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
@@ -44,11 +54,12 @@ class _HospitalListCardState extends State<HospitalListCard> {
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 3,
                   ),
-                  Text(
-                    "Chakraborty Multi Speciality Hospital",
+                  AutoSizeText(
+                    name,
                     style: TextStyle(
                       fontSize: SizeConfig.safeBlockHorizontal * 3.5,
                     ),
+                    maxLines: 1,
                   ),
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 1,
@@ -65,7 +76,7 @@ class _HospitalListCardState extends State<HospitalListCard> {
                           SizedBox(
                             width: 3.0,
                           ),
-                          Text(
+                          AutoSizeText(
                             "2.1 km",
                             style: TextStyle(
                                 fontSize: SizeConfig.safeBlockHorizontal * 3),
@@ -81,10 +92,11 @@ class _HospitalListCardState extends State<HospitalListCard> {
                           SizedBox(
                             width: 3.0,
                           ),
-                          Text(
-                            "Gurgaon, Haryana",
+                          AutoSizeText(
+                            district,
                             style: TextStyle(
                                 fontSize: SizeConfig.safeBlockHorizontal * 3),
+                            maxLines: 1,
                           )
                         ],
                       )
@@ -113,10 +125,10 @@ class _HospitalListCardState extends State<HospitalListCard> {
                             SizedBox(
                               width: 3.0,
                             ),
-                            Text(
+                            AutoSizeText(
                               "Call",
                               style: TextStyle(
-                                  fontSize: SizeConfig.safeBlockHorizontal * 4,
+                                  fontSize: SizeConfig.safeBlockHorizontal * 3,
                                   color: Colors.green),
                             )
                           ],
@@ -139,10 +151,10 @@ class _HospitalListCardState extends State<HospitalListCard> {
                             SizedBox(
                               width: 3.0,
                             ),
-                            Text(
+                            AutoSizeText(
                               "Get Directions",
                               style: TextStyle(
-                                  fontSize: SizeConfig.safeBlockHorizontal * 4,
+                                  fontSize: SizeConfig.safeBlockHorizontal * 3,
                                   color: Colors.red),
                             )
                           ],

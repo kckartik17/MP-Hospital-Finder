@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/index.dart';
@@ -28,28 +30,31 @@ class _HospitalListState extends State<HospitalList> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: configBloc.darkOn ? Colors.black : Colors.purple[200],
+          color: configBloc.darkOn ? Colors.black : Colors.white,
         ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: CustomScrollView(
-                scrollDirection: Axis.vertical,
-                slivers: <Widget>[
-                  SliverPadding(
+        child: Center(
+          child: FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString('assets/hospitals.json'),
+            builder: (context, snapshot) {
+              var hospitals = json.decode(snapshot.data.toString());
+
+              return ListView.builder(
+                itemBuilder: (BuildContext context, i) {
+                  return Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: SizeConfig.blockSizeHorizontal * 5,
-                        vertical: SizeConfig.blockSizeVertical * 2),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                          (context, index) => HospitalListCard(),
-                          childCount: 5),
+                        vertical: SizeConfig.blockSizeVertical * 0.7),
+                    child: HospitalListCard(
+                      name: hospitals[i]['name'],
+                      district: hospitals[i]['district'],
                     ),
-                  )
-                ],
-              ),
-            ),
-          ],
+                  );
+                },
+                itemCount: hospitals == null ? 0 : hospitals.length,
+              );
+            },
+          ),
         ),
       ),
     );
