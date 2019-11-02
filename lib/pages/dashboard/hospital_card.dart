@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/widgets/divider.dart';
@@ -70,8 +71,11 @@ class HospitalCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(text),
-                        Text(
+                        AutoSizeText(
+                          text,
+                          maxLines: 1,
+                        ),
+                        AutoSizeText(
                           "Gurugram, Haryana",
                           style: TextStyle(
                               fontSize: SizeConfig.safeBlockHorizontal * 2.5),

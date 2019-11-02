@@ -38,21 +38,25 @@ class _HospitalListState extends State<HospitalList> {
                 .loadString('assets/hospitals.json'),
             builder: (context, snapshot) {
               var hospitals = json.decode(snapshot.data.toString());
-
-              return ListView.builder(
-                itemBuilder: (BuildContext context, i) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.blockSizeHorizontal * 5,
-                        vertical: SizeConfig.blockSizeVertical * 0.7),
-                    child: HospitalListCard(
-                      name: hospitals[i]['name'],
-                      district: hospitals[i]['district'],
-                    ),
-                  );
-                },
-                itemCount: hospitals == null ? 0 : hospitals.length,
-              );
+              if (!snapshot.hasData || snapshot.data.isEmpty)
+                return Center(child: CircularProgressIndicator());
+              else
+                return Scrollbar(
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext context, i) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: SizeConfig.blockSizeHorizontal * 5,
+                            vertical: SizeConfig.blockSizeVertical * 0.7),
+                        child: HospitalListCard(
+                          name: hospitals[i]['name'],
+                          district: hospitals[i]['district'],
+                        ),
+                      );
+                    },
+                    itemCount: hospitals == null ? 0 : hospitals.length,
+                  ),
+                );
             },
           ),
         ),

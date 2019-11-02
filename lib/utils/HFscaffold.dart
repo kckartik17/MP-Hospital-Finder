@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/config_notifier.dart';
@@ -75,12 +76,10 @@ class HFscaffold extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text("Item 1"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: Text("Item 2"),
-                  onTap: () {},
+                  leading: Icon(Icons.reply),
+                  title: Text("Exit"),
+                  onTap: () => SystemChannels.platform
+                      .invokeMethod('SystemNavigator.pop'),
                 ),
               ],
             ),

@@ -292,10 +292,14 @@ class _HospitalListMapState extends State<HospitalListMap> {
   }
 
   moveCamera() {
-    _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: hospitals[_pageController.page.toInt()].locationCoords,
-        zoom: 14.0,
-        bearing: 45.0,
-        tilt: 45.0)));
+    _controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: hospitals[_pageController.page.toInt()].locationCoords,
+            zoom: 14.0,
+            bearing: 45.0,
+            tilt: 45.0),
+      ),
+    );
   }
 }
