@@ -9,6 +9,7 @@ import 'package:hospital_finder/pages/dashboard/search_card.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
+import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
@@ -112,7 +113,11 @@ class _DashboardState extends State<Dashboard> {
                       children: <Widget>[
                         SearchCard(
                           text: "Search Hospitals",
-                          onTap: () {},
+                          onTap: () {
+                            showSearch(
+                                context: context,
+                                delegate: SearchHospitalsDelegate());
+                          },
                           color: Colors.red,
                         ),
                         SearchCard(
