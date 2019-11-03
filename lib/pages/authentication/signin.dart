@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/pages/dashboard/dashboard.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
-import 'package:hospital_finder/universal widgets/auth_button.dart';
+import 'package:hospital_finder/universal_widgets/auth_button.dart';
 
 class SignIn extends StatelessWidget {
   static const String routeName = "/signin";
