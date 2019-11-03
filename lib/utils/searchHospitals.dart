@@ -52,10 +52,16 @@ class SearchHospitalsDelegate extends SearchDelegate {
       future: loadHospitals(),
       builder: (context, snapshot) {
         List<Hospital> hospitals = snapshot.data;
-        List<Hospital> filteredList = hospitals
-            .where((hospital) =>
-                hospital.name.toLowerCase().startsWith(query.toLowerCase()))
-            .toList();
+        List<Hospital> filteredList;
+        if (query != "") {
+          filteredList = hospitals
+              .where((hospital) =>
+                  hospital.name.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+        } else {
+          filteredList = hospitals;
+        }
+
         if (!snapshot.hasData || snapshot.data.isEmpty)
           return Center(child: CircularProgressIndicator());
         else
