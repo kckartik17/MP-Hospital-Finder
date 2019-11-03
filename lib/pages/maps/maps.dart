@@ -8,6 +8,7 @@ import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospital.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
+import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:provider/provider.dart';
 
 class HospitalListMap extends StatefulWidget {
@@ -302,10 +303,7 @@ class _HospitalListMapState extends State<HospitalListMap> {
   }
 
   Future loadHospitalList() async {
-    String content = await rootBundle.loadString('assets/hospitals.json');
-    List collection = json.decode(content);
-    List<Hospital> _hospitals =
-        collection.map((json) => Hospital.fromJson(json)).toList();
+    List<Hospital> _hospitals = await loadHospitals();
 
     setState(() {
       hospitals = _hospitals;
