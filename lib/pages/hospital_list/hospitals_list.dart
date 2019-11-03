@@ -1,10 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
-import 'package:hospital_finder/pages/hospital_list/hospital_list_card.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
+import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
+import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 
 class HospitalList extends StatefulWidget {
@@ -47,12 +50,51 @@ class _HospitalListState extends State<HospitalList> {
                         padding: EdgeInsets.symmetric(
                             horizontal: SizeConfig.blockSizeHorizontal * 5,
                             vertical: SizeConfig.blockSizeVertical * 0.7),
-                        child: HospitalListCard(
-                          name: hospitals[i].name,
-                          district: hospitals[i].district,
-                          mobile: hospitals[i].mobile,
-                          latitude: hospitals[i].latitude,
-                          longitude: hospitals[i].longitude,
+                        child: Slidable(
+                          actionPane: SlidableDrawerActionPane(),
+                          actionExtentRatio: 0.25,
+                          secondaryActions: <Widget>[
+                            IconSlideAction(
+                              caption: 'Call',
+                              color: Colors.green,
+                              icon: Icons.call,
+                              onTap: () => call(hospitals[i].mobile),
+                            ),
+                            IconSlideAction(
+                              caption: 'Get Directions',
+                              color: Colors.red,
+                              icon: Icons.directions,
+                              onTap: () => navigate(hospitals[i].latitude,
+                                  hospitals[i].longitude),
+                            ),
+                          ],
+                          child: Container(
+                            color:
+                                configBloc.darkOn ? Colors.black : Colors.white,
+                            child: ListTile(
+                              onTap: () {},
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 2.0),
+                              title: AutoSizeText(
+                                hospitals[i].name,
+                                style: TextStyle(
+                                    fontSize:
+                                        SizeConfig.safeBlockHorizontal * 4),
+                              ),
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    AssetImage("assets/images/background.jpg"),
+                              ),
+                              subtitle: AutoSizeText(
+                                "${hospitals[i].district}, ${hospitals[i].state}",
+                                style: TextStyle(
+                                    fontSize:
+                                        SizeConfig.safeBlockHorizontal * 3),
+                              ),
+                              trailing:
+                                  AutoSizeText("${hospitals[i].index} km"),
+                            ),
+                          ),
                         ),
                       );
                     },
