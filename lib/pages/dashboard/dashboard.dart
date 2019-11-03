@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:hospital_finder/config/size_config.dart';
+import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/dashboard/hospital_card.dart';
 import 'package:hospital_finder/pages/dashboard/search_card.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
+import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
@@ -99,11 +101,25 @@ class _DashboardState extends State<Dashboard> {
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 5,
                   ),
-                  Text(
-                    "Best Hospitals nearby you",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.blockSizeHorizontal * 3.8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Best Hospitals nearby you",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: SizeConfig.blockSizeHorizontal * 3.8),
+                      ),
+                      InkWell(
+                        onTap: () => Navigator.pushNamed(
+                            context, HospitalList.routeName),
+                        child: Text(
+                          "See More",
+                          style: TextStyle(
+                              fontSize: SizeConfig.blockSizeHorizontal * 3),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 2,
@@ -113,57 +129,32 @@ class _DashboardState extends State<Dashboard> {
             ),
             SafeArea(
               child: Container(
-                height: SizeConfig.blockSizeVertical * 30,
+                height: SizeConfig.blockSizeVertical * 35,
                 padding: EdgeInsets.only(
                   left: SizeConfig.blockSizeHorizontal * 2,
                   right: SizeConfig.blockSizeHorizontal * 2,
                   bottom: SizeConfig.blockSizeHorizontal * 3,
                 ),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  physics: ClampingScrollPhysics(),
-                  children: <Widget>[
-                    HospitalCard(
-                      onTap: () {},
-                      text: "Hospital 1",
-                      distance: 1.2,
-                    ),
-                    HospitalCard(
-                      onTap: () {},
-                      text: "Hospital 2",
-                      distance: 2.1,
-                    ),
-                    HospitalCard(
-                      onTap: () {},
-                      text: "Hospital 3",
-                      distance: 2.8,
-                    ),
-                    HospitalCard(
-                      onTap: () {},
-                      text: "Hospital 4",
-                      distance: 4.2,
-                    ),
-                    HospitalCard(
-                      onTap: () {},
-                      text: "Hospital 5",
-                      distance: 7.6,
-                    ),
-                    Container(
-                      height: SizeConfig.blockSizeVertical * 40,
-                      width: SizeConfig.blockSizeHorizontal * 40,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.arrow_forward_ios),
-                            onPressed: () => Navigator.pushNamed(
-                                context, HospitalList.routeName),
-                          ),
-                          Text("See more")
-                        ],
-                      ),
-                    ),
-                  ],
+                child: FutureBuilder(
+                  future: loadHospitals(),
+                  builder: (context, snapshot) {
+                    List<Hospital> hospitals = snapshot.data;
+                    if (!snapshot.hasData || snapshot.data.isEmpty)
+                      return Center(child: CircularProgressIndicator());
+                    else
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, i) {
+                          return HospitalCard(
+                              name: hospitals[i].name,
+                              onTap: () {},
+                              distance: hospitals[i].index,
+                              district: hospitals[i].district,
+                              state: hospitals[i].state);
+                        },
+                        itemCount: 5,
+                      );
+                  },
                 ),
               ),
             )

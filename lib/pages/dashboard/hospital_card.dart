@@ -8,10 +8,18 @@ import 'package:hospital_finder/utils/tools.dart';
 
 class HospitalCard extends StatelessWidget {
   final Function onTap;
-  final String text;
-  final double distance;
+  final String name;
+  final int distance;
+  final String district;
+  final String state;
 
-  const HospitalCard({Key key, this.onTap, this.text, this.distance})
+  const HospitalCard(
+      {Key key,
+      this.onTap,
+      this.name,
+      this.distance,
+      this.district,
+      this.state})
       : super(key: key);
 
   @override
@@ -72,13 +80,19 @@ class HospitalCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         AutoSizeText(
-                          text,
-                          maxLines: 1,
+                          name,
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontSize: SizeConfig.safeBlockHorizontal * 3.5,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 3,
                         ),
                         AutoSizeText(
-                          "Gurugram, Haryana",
+                          "$district, $state",
                           style: TextStyle(
-                              fontSize: SizeConfig.safeBlockHorizontal * 2.5),
+                              fontSize: SizeConfig.safeBlockHorizontal * 2),
                         )
                       ],
                     ),

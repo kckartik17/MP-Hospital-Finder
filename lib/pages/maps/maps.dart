@@ -257,11 +257,20 @@ class _HospitalListMapState extends State<HospitalListMap> {
             child: Container(
               height: 200.0,
               width: MediaQuery.of(context).size.width,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: hospitals.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _hospitalList(index);
+              child: FutureBuilder(
+                future: loadHospitals(),
+                builder: (context, snapshot) {
+                  List<Hospital> hospitals = snapshot.data;
+                  if (!snapshot.hasData || snapshot.data.isEmpty)
+                    return Center(child: CircularProgressIndicator());
+                  else
+                    return PageView.builder(
+                      controller: _pageController,
+                      itemCount: hospitals.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _hospitalList(index);
+                      },
+                    );
                 },
               ),
             ),

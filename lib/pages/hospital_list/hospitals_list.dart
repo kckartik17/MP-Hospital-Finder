@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/config/size_config.dart';
+import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/hospital_list/hospital_list_card.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
+import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:provider/provider.dart';
 
 class HospitalList extends StatefulWidget {
@@ -34,10 +36,9 @@ class _HospitalListState extends State<HospitalList> {
         ),
         child: Center(
           child: FutureBuilder(
-            future: DefaultAssetBundle.of(context)
-                .loadString('assets/hospitals.json'),
+            future: loadHospitals(),
             builder: (context, snapshot) {
-              var hospitals = json.decode(snapshot.data.toString());
+              List<Hospital> hospitals = snapshot.data;
               if (!snapshot.hasData || snapshot.data.isEmpty)
                 return Center(child: CircularProgressIndicator());
               else
@@ -49,8 +50,8 @@ class _HospitalListState extends State<HospitalList> {
                             horizontal: SizeConfig.blockSizeHorizontal * 5,
                             vertical: SizeConfig.blockSizeVertical * 0.7),
                         child: HospitalListCard(
-                          name: hospitals[i]['name'],
-                          district: hospitals[i]['district'],
+                          name: hospitals[i].name,
+                          district: hospitals[i].district,
                         ),
                       );
                     },
