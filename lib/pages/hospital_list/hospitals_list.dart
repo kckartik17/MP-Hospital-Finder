@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';

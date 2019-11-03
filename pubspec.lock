@@ -197,6 +197,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.11"
+  flare_dart:
+    dependency: transitive
+    description:
+      name: flare_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.3"
+  flare_flutter:
+    dependency: transitive
+    description:
+      name: flare_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.4"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -249,6 +263,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1"
+  giffy_dialog:
+    dependency: "direct main"
+    description:
+      name: giffy_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.0"
   glob:
     dependency: transitive
     description:
@@ -634,4 +655,4 @@ packages:
     version: "2.2.0"
 sdks:
   dart: ">=2.3.0 <3.0.0"
-  flutter: ">=1.6.0 <2.0.0"
+  flutter: ">=1.7.8+hotfix.3 <2.0.0"
