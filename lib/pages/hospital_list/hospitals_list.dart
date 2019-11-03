@@ -52,6 +52,9 @@ class _HospitalListState extends State<HospitalList> {
                         child: HospitalListCard(
                           name: hospitals[i].name,
                           district: hospitals[i].district,
+                          mobile: hospitals[i].mobile,
+                          latitude: hospitals[i].latitude,
+                          longitude: hospitals[i].longitude,
                         ),
                       );
                     },

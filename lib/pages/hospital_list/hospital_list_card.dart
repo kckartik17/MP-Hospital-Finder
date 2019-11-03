@@ -3,23 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/utils/call.dart';
+import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 
 class HospitalListCard extends StatefulWidget {
   final String name;
   final String district;
-
-  const HospitalListCard({Key key, this.name, this.district}) : super(key: key);
+  final String mobile;
+  final String latitude;
+  final String longitude;
+  const HospitalListCard(
+      {Key key,
+      this.name,
+      this.district,
+      this.mobile,
+      this.latitude,
+      this.longitude})
+      : super(key: key);
   @override
   _HospitalListCardState createState() =>
-      _HospitalListCardState(name, district);
+      _HospitalListCardState(name, district, mobile, latitude, longitude);
 }
 
 class _HospitalListCardState extends State<HospitalListCard> {
   final String name;
   final String district;
+  final String mobile;
+  final String latitude;
+  final String longitude;
 
-  _HospitalListCardState(this.name, this.district);
+  _HospitalListCardState(
+      this.name, this.district, this.mobile, this.latitude, this.longitude);
   @override
   Widget build(BuildContext context) {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
@@ -110,10 +125,7 @@ class _HospitalListCardState extends State<HospitalListCard> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                          Fluttertoast.showToast(
-                              msg: "Call",
-                              gravity: ToastGravity.BOTTOM,
-                              toastLength: Toast.LENGTH_SHORT);
+                          call(mobile);
                         },
                         child: Row(
                           children: <Widget>[
@@ -136,10 +148,7 @@ class _HospitalListCardState extends State<HospitalListCard> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Fluttertoast.showToast(
-                              msg: "Get Directions",
-                              gravity: ToastGravity.BOTTOM,
-                              toastLength: Toast.LENGTH_SHORT);
+                          navigate(latitude, longitude);
                         },
                         child: Row(
                           children: <Widget>[
