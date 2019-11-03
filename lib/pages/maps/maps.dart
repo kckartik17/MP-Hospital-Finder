@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,22 +23,15 @@ class _HospitalListMapState extends State<HospitalListMap> {
   List<Marker> allMarkers = [];
 
   PageController _pageController;
+  List<Hospital> hospitals;
 
   int prevPage;
 
   @override
   void initState() {
     super.initState();
-    hospitals.forEach((element) {
-      allMarkers.add(Marker(
-          markerId: MarkerId(element.name),
-          draggable: false,
-          infoWindow:
-              InfoWindow(title: element.name, snippet: element.location),
-          position: element.locationCoords));
-    });
-    _pageController = PageController(initialPage: 1, viewportFraction: 0.8)
-      ..addListener(_onScroll);
+
+    loadHospitalList();
   }
 
   void _onScroll() {
@@ -46,7 +41,7 @@ class _HospitalListMapState extends State<HospitalListMap> {
     }
   }
 
-  _coffeeShopList(index) {
+  _hospitalList(index) {
     return AnimatedBuilder(
       animation: _pageController,
       builder: (BuildContext context, Widget widget) {
@@ -265,7 +260,7 @@ class _HospitalListMapState extends State<HospitalListMap> {
                 controller: _pageController,
                 itemCount: hospitals.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return _coffeeShopList(index);
+                  return _hospitalList(index);
                 },
               ),
             ),
@@ -295,11 +290,35 @@ class _HospitalListMapState extends State<HospitalListMap> {
     _controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-            target: hospitals[_pageController.page.toInt()].locationCoords,
+            target: LatLng(
+              double.parse(hospitals[_pageController.page.toInt()].latitude),
+              double.parse(hospitals[_pageController.page.toInt()].longitude),
+            ),
             zoom: 14.0,
             bearing: 45.0,
             tilt: 45.0),
       ),
     );
+  }
+
+  Future loadHospitalList() async {
+    String content = await rootBundle.loadString('assets/hospitals.json');
+    List collection = json.decode(content);
+    List<Hospital> _hospitals =
+        collection.map((json) => Hospital.fromJson(json)).toList();
+
+    setState(() {
+      hospitals = _hospitals;
+    });
+    hospitals.forEach((element) {
+      allMarkers.add(Marker(
+          markerId: MarkerId(element.name),
+          draggable: false,
+          infoWindow: InfoWindow(title: element.name, snippet: element.address),
+          position: LatLng(double.parse(element.latitude),
+              double.parse(element.longitude))));
+    });
+    _pageController = PageController(initialPage: 1, viewportFraction: 0.8)
+      ..addListener(_onScroll);
   }
 }
