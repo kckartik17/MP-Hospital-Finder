@@ -231,51 +231,43 @@ class _HospitalListMapState extends State<HospitalListMap> {
       changeMapMode();
     }
     return HFscaffold(
-      title: "Hospitals",
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          GoogleMap(
-            mapType: MapType.normal,
-            zoomGesturesEnabled: true,
-            markers: Set.from(allMarkers),
-            myLocationButtonEnabled: true,
-            myLocationEnabled: true,
-            initialCameraPosition: CameraPosition(
-                target: LatLng(28.5068374, 77.0485119), zoom: 14.0),
-            onMapCreated: (GoogleMapController controller) {
-              _controller = controller;
-              isMapCreated = true;
-              changeMapMode();
-              setState(() {});
-            },
-          ),
-          Positioned(
-            bottom: 20.0,
-            child: Container(
-              height: 200.0,
-              width: MediaQuery.of(context).size.width,
-              child: FutureBuilder(
-                future: loadHospitals(),
-                builder: (context, snapshot) {
-                  List<Hospital> hospitals = snapshot.data;
-                  if (!snapshot.hasData || snapshot.data.isEmpty)
-                    return Center(child: CircularProgressIndicator());
-                  else
-                    return PageView.builder(
-                      controller: _pageController,
-                      itemCount: hospitals.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _hospitalList(index);
-                      },
-                    );
-                },
-              ),
+        title: "Hospitals",
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            GoogleMap(
+              mapType: MapType.normal,
+              zoomGesturesEnabled: true,
+              markers: Set.from(allMarkers),
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(28.5068374, 77.0485119), zoom: 14.0),
+              onMapCreated: (GoogleMapController controller) {
+                _controller = controller;
+                print("created");
+
+                changeMapMode();
+                setState(() {
+                  isMapCreated = true;
+                });
+              },
             ),
-          )
-        ],
-      ),
-    );
+            Positioned(
+              bottom: 30.0,
+              child: Container(
+                  height: 200.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: hospitals.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _hospitalList(index);
+                    },
+                  )),
+            ),
+          ],
+        ));
   }
 
   changeMapMode() {
@@ -316,12 +308,17 @@ class _HospitalListMapState extends State<HospitalListMap> {
       hospitals = _hospitals;
     });
     hospitals.forEach((element) {
-      allMarkers.add(Marker(
+      allMarkers.add(
+        Marker(
           markerId: MarkerId(element.name),
           draggable: false,
           infoWindow: InfoWindow(title: element.name, snippet: element.address),
-          position: LatLng(double.parse(element.latitude),
-              double.parse(element.longitude))));
+          position: LatLng(
+            double.parse(element.latitude),
+            double.parse(element.longitude),
+          ),
+        ),
+      );
     });
     _pageController = PageController(initialPage: 1, viewportFraction: 0.8)
       ..addListener(_onScroll);
