@@ -10,6 +10,7 @@ import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:hospital_finder/utils/searchHospitals.dart';
+import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
@@ -22,6 +23,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     LocationBloc locationBloc = Provider.of<LocationBloc>(context);
+    ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     SizeConfig().init(context);
     return HFscaffold(
       drawerIcon: true,
@@ -128,29 +130,43 @@ class _DashboardState extends State<Dashboard> {
                   // SizedBox(
                   //   height: SizeConfig.blockSizeVertical * 5,
                   // ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Container(
-                      color: Colors.white,
-                      margin: EdgeInsets.zero,
-                      padding: EdgeInsets.zero,
-                      width: double.infinity,
-                      child: ListTile(
-                        enabled: false,
-                        title: GestureDetector(
-                            onTap: () => showSearch(
-                                context: context,
-                                delegate: SearchHospitalsDelegate()),
-                            child: Text("Search Hospitals...")),
-                        trailing: IconButton(
-                          icon: Icon(Icons.search),
-                          onPressed: () => showSearch(
+
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: configBloc.darkOn
+                            ? Tools.hexToColor("#1f2124")
+                            : Colors.white,
+                        boxShadow: [
+                          !configBloc.darkOn
+                              ? BoxShadow(
+                                  offset: Offset(0, 10),
+                                  blurRadius: 10.0,
+                                  color: Colors.grey[400])
+                              : BoxShadow(
+                                  offset: Offset(0, 10),
+                                  blurRadius: 10.0,
+                                  color: Colors.black)
+                        ]),
+                    margin: EdgeInsets.zero,
+                    padding: EdgeInsets.zero,
+                    width: double.infinity,
+                    child: ListTile(
+                      enabled: false,
+                      title: GestureDetector(
+                          onTap: () => showSearch(
                               context: context,
                               delegate: SearchHospitalsDelegate()),
-                        ),
+                          child: Text("Search Hospitals...")),
+                      trailing: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () => showSearch(
+                            context: context,
+                            delegate: SearchHospitalsDelegate()),
                       ),
                     ),
                   ),
+
                   SizedBox(
                     height: SizeConfig.blockSizeVertical * 2,
                   ),
