@@ -26,13 +26,13 @@ class _ConfigPageState extends State<ConfigPage> {
         primaryColor: configBloc.darkOn ? Colors.black : Colors.white,
         disabledColor: Colors.grey,
         cardColor: configBloc.darkOn ? Colors.black : Colors.white,
-        canvasColor: configBloc.darkOn ? Colors.black : Colors.grey[50],
+        canvasColor: configBloc.darkOn ? Colors.black : Colors.white,
         brightness: configBloc.darkOn ? Brightness.dark : Brightness.light,
         buttonTheme: Theme.of(context).buttonTheme.copyWith(
             colorScheme:
                 configBloc.darkOn ? ColorScheme.dark() : ColorScheme.light()),
         appBarTheme: AppBarTheme(
-          elevation: 10.0,
+          elevation: 0.0,
         ),
       ),
       home: Dashboard(),

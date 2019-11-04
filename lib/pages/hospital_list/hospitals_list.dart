@@ -28,19 +28,22 @@ class _HospitalListState extends State<HospitalList> {
       fab: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
         curve: Curves.bounceIn,
+        backgroundColor: configBloc.darkOn ? Colors.white : Colors.blue,
         elevation: 8.0,
         shape: CircleBorder(),
         children: [
           SpeedDialChild(
             child: Icon(Icons.search),
-            backgroundColor: Colors.green,
+            backgroundColor: configBloc.darkOn ? Colors.white : Colors.green,
+            labelStyle: TextStyle(color: Colors.black),
             label: 'Search',
             onTap: () => showSearch(
                 context: context, delegate: SearchHospitalsDelegate()),
           ),
           SpeedDialChild(
             child: Icon(Icons.directions),
-            backgroundColor: Colors.red,
+            backgroundColor: configBloc.darkOn ? Colors.white : Colors.red,
+            labelStyle: TextStyle(color: Colors.black),
             label: 'Sort by distance',
             onTap: () => print("Sort by distance"),
           )
