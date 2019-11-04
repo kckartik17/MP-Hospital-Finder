@@ -36,14 +36,6 @@ class HFscaffold extends StatelessWidget {
                   )
                 : null,
             actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  "Maps",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onPressed: () =>
-                    Navigator.pushNamed(context, HospitalListMap.routeName),
-              ),
               IconButton(
                 icon: Icon(
                   configBloc.darkOn

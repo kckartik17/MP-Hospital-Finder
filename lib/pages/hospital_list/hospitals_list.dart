@@ -2,9 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/pages/maps/maps.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
@@ -46,6 +48,13 @@ class _HospitalListState extends State<HospitalList> {
             labelStyle: TextStyle(color: Colors.black),
             label: 'Sort by distance',
             onTap: () => print("Sort by distance"),
+          ),
+          SpeedDialChild(
+            child: Icon(FontAwesomeIcons.map),
+            backgroundColor: configBloc.darkOn ? Colors.white : Colors.purple,
+            labelStyle: TextStyle(color: Colors.black),
+            label: 'View in Maps',
+            onTap: () => Navigator.pushNamed(context, HospitalListMap.routeName),
           )
         ],
       ),
@@ -64,54 +73,46 @@ class _HospitalListState extends State<HospitalList> {
                 return Scrollbar(
                   child: ListView.builder(
                     itemBuilder: (BuildContext context, i) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: SizeConfig.blockSizeHorizontal * 5,
-                            vertical: SizeConfig.blockSizeVertical * 0.7),
-                        child: Slidable(
-                          actionPane: SlidableDrawerActionPane(),
-                          actionExtentRatio: 0.25,
-                          secondaryActions: <Widget>[
-                            IconSlideAction(
-                              caption: 'Call',
-                              color: Colors.green,
-                              icon: Icons.call,
-                              onTap: () => call(hospitals[i].mobile),
+                      return Slidable(
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.25,
+                        secondaryActions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Call',
+                            color: Colors.green,
+                            icon: Icons.call,
+                            onTap: () => call(hospitals[i].mobile),
+                          ),
+                          IconSlideAction(
+                            caption: 'Get Directions',
+                            color: Colors.red,
+                            icon: Icons.directions,
+                            onTap: () => navigate(
+                                hospitals[i].latitude, hospitals[i].longitude),
+                          ),
+                        ],
+                        child: Container(
+                          color:
+                              configBloc.darkOn ? Colors.black : Colors.white,
+                          child: ListTile(
+                            onTap: () {},
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.blockSizeHorizontal * 2),
+                            title: AutoSizeText(
+                              hospitals[i].name,
+                              style: TextStyle(
+                                  fontSize: SizeConfig.safeBlockHorizontal * 4),
                             ),
-                            IconSlideAction(
-                              caption: 'Get Directions',
-                              color: Colors.red,
-                              icon: Icons.directions,
-                              onTap: () => navigate(hospitals[i].latitude,
-                                  hospitals[i].longitude),
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("assets/images/background.jpg"),
                             ),
-                          ],
-                          child: Container(
-                            color:
-                                configBloc.darkOn ? Colors.black : Colors.white,
-                            child: ListTile(
-                              onTap: () {},
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 2.0),
-                              title: AutoSizeText(
-                                hospitals[i].name,
-                                style: TextStyle(
-                                    fontSize:
-                                        SizeConfig.safeBlockHorizontal * 4),
-                              ),
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("assets/images/background.jpg"),
-                              ),
-                              subtitle: AutoSizeText(
-                                "${hospitals[i].district}, ${hospitals[i].state}",
-                                style: TextStyle(
-                                    fontSize:
-                                        SizeConfig.safeBlockHorizontal * 3),
-                              ),
-                              trailing:
-                                  AutoSizeText("${hospitals[i].index} km"),
+                            subtitle: AutoSizeText(
+                              "${hospitals[i].district}, ${hospitals[i].state}",
+                              style: TextStyle(
+                                  fontSize: SizeConfig.safeBlockHorizontal * 3),
                             ),
+                            trailing: AutoSizeText("${hospitals[i].index} km"),
                           ),
                         ),
                       );

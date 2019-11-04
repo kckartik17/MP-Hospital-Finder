@@ -166,7 +166,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
 
                   SizedBox(
-                    height: SizeConfig.blockSizeVertical * 2,
+                    height: SizeConfig.blockSizeHorizontal * 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -196,7 +196,7 @@ class _DashboardState extends State<Dashboard> {
             ),
             SafeArea(
               child: Container(
-                height: SizeConfig.blockSizeVertical * 35,
+                height: SizeConfig.blockSizeHorizontal * 60,
                 padding: EdgeInsets.only(
                   left: SizeConfig.blockSizeHorizontal * 2,
                   right: SizeConfig.blockSizeHorizontal * 2,

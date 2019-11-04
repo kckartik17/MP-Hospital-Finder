@@ -53,9 +53,7 @@ class _HospitalListMapState extends State<HospitalListMap> {
         }
         return Center(
           child: SizedBox(
-            height: Curves.easeInOut.transform(value) *
-                SizeConfig.blockSizeVertical *
-                20.5,
+            height: Curves.easeInOut.transform(value) * 145.0,
             width: Curves.easeInOut.transform(value) * 350.0,
             child: widget,
           ),
