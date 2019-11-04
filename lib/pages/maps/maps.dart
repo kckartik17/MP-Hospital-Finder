@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospital.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/universal_widgets/divider.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +53,9 @@ class _HospitalListMapState extends State<HospitalListMap> {
         }
         return Center(
           child: SizedBox(
-            height: Curves.easeInOut.transform(value) * 125.0,
+            height: Curves.easeInOut.transform(value) *
+                SizeConfig.blockSizeVertical *
+                20.5,
             width: Curves.easeInOut.transform(value) * 350.0,
             child: widget,
           ),
@@ -61,161 +65,100 @@ class _HospitalListMapState extends State<HospitalListMap> {
         onTap: () {
           // moveCamera();
         },
-        child: Stack(
-          children: <Widget>[
-            Container(
-              margin:
-                  EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 10),
-              height: SizeConfig.blockSizeVertical * 18,
-              width: SizeConfig.blockSizeHorizontal * 80,
-              decoration: BoxDecoration(
-                color: _configBloc.darkOn ? Colors.black : Colors.white,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(8.0),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10.0,
-                    offset: new Offset(0.0, 10.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: _configBloc.darkOn ? Colors.black : Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10.0,
+                  offset: new Offset(0.0, 10.0),
+                  spreadRadius: 5),
+            ],
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.blockSizeHorizontal * 5,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 3,
+                ),
+                AutoSizeText(
+                  hospitals[index].name,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: SizeConfig.safeBlockHorizontal * 4,
                   ),
-                ],
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: SizeConfig.blockSizeHorizontal * 15,
-                    right: SizeConfig.blockSizeHorizontal * 3),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 1,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(
-                      height: SizeConfig.blockSizeVertical * 3,
-                    ),
-                    Text(
-                      hospitals[index].name,
-                      style: TextStyle(
-                        fontSize: SizeConfig.safeBlockHorizontal * 3,
-                      ),
-                    ),
-                    SizedBox(
-                      height: SizeConfig.blockSizeVertical * 1,
-                    ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.directions_car,
-                              size: SizeConfig.blockSizeHorizontal * 3,
-                            ),
-                            SizedBox(
-                              width: 3.0,
-                            ),
-                            Text(
-                              "2.1 km",
-                              style: TextStyle(
-                                  fontSize: SizeConfig.safeBlockHorizontal * 3),
-                            )
-                          ],
+                        Icon(
+                          Icons.directions_car,
+                          size: SizeConfig.blockSizeHorizontal * 3,
                         ),
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.location_on,
-                              size: SizeConfig.blockSizeHorizontal * 3,
-                            ),
-                            SizedBox(
-                              width: 3.0,
-                            ),
-                            Text(
-                              "${hospitals[index].district}",
-                              style: TextStyle(
-                                  fontSize: SizeConfig.safeBlockHorizontal * 3),
-                            )
-                          ],
+                        SizedBox(
+                          width: 3.0,
+                        ),
+                        Text(
+                          "2.1 km",
+                          style: TextStyle(
+                              fontSize: SizeConfig.safeBlockHorizontal * 3),
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: SizeConfig.blockSizeVertical * 4,
-                    ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Fluttertoast.showToast(
-                                msg: "Call",
-                                gravity: ToastGravity.BOTTOM,
-                                toastLength: Toast.LENGTH_SHORT);
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.call,
-                                size: SizeConfig.blockSizeHorizontal * 3,
-                                color: Colors.green,
-                              ),
-                              SizedBox(
-                                width: 3.0,
-                              ),
-                              Text(
-                                "Call",
-                                style: TextStyle(
-                                    fontSize:
-                                        SizeConfig.safeBlockHorizontal * 3,
-                                    color: Colors.green),
-                              )
-                            ],
-                          ),
+                        Icon(
+                          Icons.location_on,
+                          size: SizeConfig.blockSizeHorizontal * 3,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Fluttertoast.showToast(
-                                msg: "Get Directions",
-                                gravity: ToastGravity.BOTTOM,
-                                toastLength: Toast.LENGTH_SHORT);
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.directions,
-                                size: SizeConfig.blockSizeHorizontal * 3,
-                                color: Colors.red,
-                              ),
-                              SizedBox(
-                                width: 3.0,
-                              ),
-                              Text(
-                                "Get Directions",
-                                style: TextStyle(
-                                    fontSize:
-                                        SizeConfig.safeBlockHorizontal * 3,
-                                    color: Colors.red),
-                              )
-                            ],
-                          ),
+                        SizedBox(
+                          width: 3.0,
+                        ),
+                        Text(
+                          "${hospitals[index].district}",
+                          style: TextStyle(
+                              fontSize: SizeConfig.safeBlockHorizontal * 3),
                         )
                       ],
                     )
                   ],
                 ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                top: (SizeConfig.blockSizeVertical) * 9 / 2,
-              ),
-              height: SizeConfig.blockSizeVertical * 9,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image(
-                  image: AssetImage("assets/images/background.jpg"),
-                  fit: BoxFit.cover,
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 2,
                 ),
-              ),
-            )
-          ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.call,
+                        color: Colors.green,
+                      ),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.directions,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {},
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
