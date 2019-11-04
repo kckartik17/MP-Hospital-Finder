@@ -26,7 +26,7 @@ class _ConfigPageState extends State<ConfigPage> {
         primaryColor: configBloc.darkOn ? Colors.black : Colors.white,
         disabledColor: Colors.grey,
         cardColor: configBloc.darkOn ? Colors.black : Colors.white,
-        canvasColor: configBloc.darkOn ? Colors.black : Colors.white,
+        canvasColor: configBloc.darkOn ? Colors.black : Colors.grey[200],
         brightness: configBloc.darkOn ? Brightness.dark : Brightness.light,
         buttonTheme: Theme.of(context).buttonTheme.copyWith(
             colorScheme:

@@ -204,7 +204,7 @@ class _HospitalListMapState extends State<HospitalListMap> {
             ),
             Container(
               margin: EdgeInsets.only(
-                top: SizeConfig.blockSizeVertical * 4,
+                top: (SizeConfig.blockSizeVertical) * 9 / 2,
               ),
               height: SizeConfig.blockSizeVertical * 9,
               child: ClipRRect(
