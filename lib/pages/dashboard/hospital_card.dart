@@ -48,8 +48,9 @@ class HospitalCard extends StatelessWidget {
                 boxShadow: !configBloc.darkOn
                     ? [
                         BoxShadow(
-                          color: Colors.grey[200],
+                          color: Colors.grey[400],
                           blurRadius: 10,
+                          offset: Offset(0, 10),
                           spreadRadius: 5,
                         )
                       ]
@@ -118,7 +119,6 @@ class HospitalCard extends StatelessWidget {
               ),
               backgroundColor:
                   configBloc.darkOn ? Colors.red : Colors.blue[100],
-              elevation: 8,
             ),
           ),
         ),
