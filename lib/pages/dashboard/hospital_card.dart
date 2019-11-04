@@ -70,7 +70,7 @@ class HospitalCard extends StatelessWidget {
                       ),
                       image: DecorationImage(
                           image: AssetImage("assets/images/background.jpg"),
-                          fit: BoxFit.cover),
+                          fit: BoxFit.fill),
                     ),
                   ),
                   CustomizedDivider(
