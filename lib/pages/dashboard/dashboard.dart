@@ -137,17 +137,15 @@ class _DashboardState extends State<Dashboard> {
                         color: configBloc.darkOn
                             ? Tools.hexToColor("#1f2124")
                             : Colors.white,
-                        boxShadow: [
-                          !configBloc.darkOn
-                              ? BoxShadow(
-                                  offset: Offset(0, 10),
-                                  blurRadius: 10.0,
-                                  color: Colors.grey[400])
-                              : BoxShadow(
-                                  offset: Offset(0, 10),
-                                  blurRadius: 10.0,
-                                  color: Colors.black)
-                        ]),
+                        boxShadow: !configBloc.darkOn
+                            ? [
+                                BoxShadow(
+                                    offset: Offset(0, 10),
+                                    blurRadius: 10.0,
+                                    color: Colors.grey[400],
+                                    spreadRadius: 3)
+                              ]
+                            : null),
                     margin: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
                     width: double.infinity,
