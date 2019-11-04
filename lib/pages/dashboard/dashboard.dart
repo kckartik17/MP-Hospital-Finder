@@ -57,9 +57,6 @@ class _DashboardState extends State<Dashboard> {
                                 " ....")
                             : Text(locationBloc.location),
                       ),
-                      SizedBox(
-                        width: SizeConfig.blockSizeHorizontal * 2,
-                      ),
                       IconButton(
                         icon: Icon(
                           Icons.edit,
@@ -94,42 +91,68 @@ class _DashboardState extends State<Dashboard> {
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 2,
-                  ),
-                  Text(
-                    "What are you looking for ?",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: SizeConfig.blockSizeHorizontal * 3.8),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 2,
-                  ),
-                  Center(
-                    child: Wrap(
-                      runSpacing: SizeConfig.blockSizeVertical * 2,
-                      spacing: SizeConfig.blockSizeHorizontal * 5,
-                      children: <Widget>[
-                        SearchCard(
-                          text: "Search Hospitals",
-                          onTap: () {
-                            showSearch(
+                  // SizedBox(
+                  //   height: SizeConfig.blockSizeVertical * 2,
+                  // ),
+                  // Text(
+                  //   "What are you looking for ?",
+                  //   style: TextStyle(
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: SizeConfig.blockSizeHorizontal * 3.8),
+                  // ),
+                  // SizedBox(
+                  //   height: SizeConfig.blockSizeVertical * 2,
+                  // ),
+                  // Center(
+                  //   child: Wrap(
+                  //     runSpacing: SizeConfig.blockSizeVertical * 2,
+                  //     spacing: SizeConfig.blockSizeHorizontal * 5,
+                  //     children: <Widget>[
+                  //       SearchCard(
+                  //         text: "Search Hospitals",
+                  //         onTap: () {
+                  //           showSearch(
+                  //               context: context,
+                  //               delegate: SearchHospitalsDelegate());
+                  //         },
+                  //         color: Colors.red,
+                  //       ),
+                  //       SearchCard(
+                  //         text: "Search Blood Banks",
+                  //         onTap: () {},
+                  //         color: Colors.teal,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: SizeConfig.blockSizeVertical * 5,
+                  // ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Container(
+                      color: Colors.white,
+                      margin: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
+                      width: double.infinity,
+                      child: ListTile(
+                        enabled: false,
+                        title: GestureDetector(
+                            onTap: () => showSearch(
                                 context: context,
-                                delegate: SearchHospitalsDelegate());
-                          },
-                          color: Colors.red,
+                                delegate: SearchHospitalsDelegate()),
+                            child: Text("Search Hospitals...")),
+                        trailing: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () => showSearch(
+                              context: context,
+                              delegate: SearchHospitalsDelegate()),
                         ),
-                        SearchCard(
-                          text: "Search Blood Banks",
-                          onTap: () {},
-                          color: Colors.teal,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                   SizedBox(
-                    height: SizeConfig.blockSizeVertical * 5,
+                    height: SizeConfig.blockSizeVertical * 2,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -47,7 +47,6 @@ class SearchHospitalsDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> mylist = ["dsfgsdg", "dgdagda", "dgsdgsd", "dagadg"];
     return FutureBuilder(
       future: loadHospitals(),
       builder: (context, snapshot) {
