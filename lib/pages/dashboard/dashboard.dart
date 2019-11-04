@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
@@ -65,31 +66,30 @@ class _DashboardState extends State<Dashboard> {
                           size: SizeConfig.safeBlockHorizontal * 4,
                         ),
                         onPressed: () => showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (_) => AssetGiffyDialog(
-                            image: Image(
-                              image: AssetImage('assets/images/background.jpg'),
-                              fit: BoxFit.fill,
-                            ),
-                            title: Text(
-                              "How to get location ?",
-                              style: TextStyle(
-                                  fontSize: SizeConfig.safeBlockHorizontal * 5),
-                            ),
-                            buttonOkText: Text("Enter manually"),
-                            buttonCancelText: Text("Using GPS"),
-                            onOkButtonPressed: () => print("Enter it manually"),
-                            onCancelButtonPressed: () {
-                              locationBloc.getLocation();
-                              Navigator.of(context).pop();
-                            },
-                            entryAnimation: EntryAnimation.TOP_BOTTOM,
-                            buttonCancelColor: Colors.red[200],
-                            buttonRadius: 30.0,
-                            cornerRadius: 50.0,
-                          ),
-                        ),
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (_) => CupertinoAlertDialog(
+                                  content: Text(
+                                    "How to get location ?",
+                                    style: TextStyle(
+                                        fontSize:
+                                            SizeConfig.blockSizeHorizontal * 5),
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text("Using GPS"),
+                                      onPressed: () {
+                                        locationBloc.getLocation();
+
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text("Enter Manually"),
+                                      onPressed: () {},
+                                    )
+                                  ],
+                                )),
                       )
                     ],
                   ),
