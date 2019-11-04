@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/config_notifier.dart';
@@ -9,7 +10,7 @@ import 'package:provider/provider.dart';
 class HFscaffold extends StatelessWidget {
   final String title;
   final Widget body;
-  final FloatingActionButton fab;
+  final SpeedDial fab;
   final bool drawerIcon;
 
   const HFscaffold(
@@ -86,8 +87,6 @@ class HFscaffold extends StatelessWidget {
           ),
           body: body,
           floatingActionButton: fab ?? null,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
@@ -8,6 +9,7 @@ import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:hospital_finder/utils/navigation.dart';
+import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:provider/provider.dart';
 
 class HospitalList extends StatefulWidget {
@@ -23,13 +25,26 @@ class _HospitalListState extends State<HospitalList> {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     return HFscaffold(
       title: "Search Hospitals",
-      fab: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text("Sort by distance"),
-        elevation: 10.0,
-        icon: Icon(Icons.directions),
-        backgroundColor: configBloc.darkOn ? Colors.grey[700] : Colors.white,
-        foregroundColor: configBloc.darkOn ? Colors.white : Colors.black,
+      fab: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        curve: Curves.bounceIn,
+        elevation: 8.0,
+        shape: CircleBorder(),
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.search),
+            backgroundColor: Colors.green,
+            label: 'Search',
+            onTap: () => showSearch(
+                context: context, delegate: SearchHospitalsDelegate()),
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.directions),
+            backgroundColor: Colors.red,
+            label: 'Sort by distance',
+            onTap: () => print("Sort by distance"),
+          )
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
