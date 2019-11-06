@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospital.dart';
@@ -171,44 +172,69 @@ class _HospitalListMapState extends State<HospitalListMap> {
     if (isMapCreated) {
       changeMapMode();
     }
-    return HFscaffold(
-        title: "Hospitals",
+    return Scaffold(
         body: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            GoogleMap(
-              mapType: MapType.normal,
-              zoomGesturesEnabled: true,
-              markers: Set.from(allMarkers),
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(28.5068374, 77.0485119), zoom: 14.0),
-              onMapCreated: (GoogleMapController controller) {
-                _controller = controller;
-                print("created");
+      fit: StackFit.expand,
+      children: <Widget>[
+        GoogleMap(
+          mapType: MapType.normal,
+          compassEnabled: false,
+          zoomGesturesEnabled: true,
+          markers: Set.from(allMarkers),
+          initialCameraPosition: CameraPosition(
+              target: LatLng(28.5068374, 77.0485119), zoom: 14.0),
+          onMapCreated: (GoogleMapController controller) {
+            _controller = controller;
+            print("created");
 
-                changeMapMode();
-                setState(() {
-                  isMapCreated = true;
-                });
-              },
-            ),
-            Positioned(
-              bottom: 30.0,
-              child: Container(
-                  height: 200.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: hospitals.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return _hospitalList(index);
-                    },
-                  )),
-            ),
-          ],
-        ));
+            changeMapMode();
+            setState(() {
+              isMapCreated = true;
+            });
+          },
+        ),
+        Positioned(
+          bottom: 30.0,
+          child: Container(
+              height: 200.0,
+              width: MediaQuery.of(context).size.width,
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: hospitals.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _hospitalList(index);
+                },
+              )),
+        ),
+        Positioned(
+          top: 30.0,
+          left: 10.0,
+          right: 10.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              IconButton(
+                icon: Icon(
+                  configBloc.darkOn
+                      ? FontAwesomeIcons.moon
+                      : FontAwesomeIcons.solidMoon,
+                  size: 18,
+                ),
+                onPressed: () {
+                  configBloc.reverseDarkMode();
+                },
+              )
+            ],
+          ),
+        )
+      ],
+    ));
   }
 
   changeMapMode() {
