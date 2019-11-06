@@ -21,7 +21,7 @@ Hospital _$HospitalFromJson(Map<String, dynamic> json) {
     ..ambulancePhone = json['ambulancePhone'] as String
     ..bloodbankPhone = json['bloodbankPhone'] as String
     ..tollfreePhone = json['tollfreePhone'] as String
-    ..Helpline = json['Helpline'] as String
+    ..helpline = json['Helpline'] as String
     ..email = json['email'] as String
     ..website = json['website'] as String
     ..specialties = json['specialties'] as String
@@ -44,7 +44,7 @@ Map<String, dynamic> _$HospitalToJson(Hospital instance) => <String, dynamic>{
       'ambulancePhone': instance.ambulancePhone,
       'bloodbankPhone': instance.bloodbankPhone,
       'tollfreePhone': instance.tollfreePhone,
-      'Helpline': instance.Helpline,
+      'Helpline': instance.helpline,
       'email': instance.email,
       'website': instance.website,
       'specialties': instance.specialties,
