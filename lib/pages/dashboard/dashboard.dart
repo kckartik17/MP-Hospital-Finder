@@ -7,6 +7,7 @@ import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/dashboard/hospital_card.dart';
 import 'package:hospital_finder/pages/dashboard/search_card.dart';
+import 'package:hospital_finder/pages/description_page/Description.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
@@ -214,7 +215,10 @@ class _DashboardState extends State<Dashboard> {
                         itemBuilder: (BuildContext context, i) {
                           return HospitalCard(
                               name: hospitals[i].name,
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, Description.routeName);
+                              },
                               distance: hospitals[i].index,
                               district: hospitals[i].district,
                               state: hospitals[i].state);

@@ -2,6 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/universal_widgets/divider.dart';
+import 'package:hospital_finder/utils/call.dart';
+import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/utils/tools.dart';
@@ -12,6 +14,9 @@ class HospitalCard extends StatelessWidget {
   final int distance;
   final String district;
   final String state;
+  final String latitude;
+  final String longitude;
+  final String mobile;
 
   const HospitalCard(
       {Key key,
@@ -19,7 +24,10 @@ class HospitalCard extends StatelessWidget {
       this.name,
       this.distance,
       this.district,
-      this.state})
+      this.state,
+      this.latitude,
+      this.longitude,
+      this.mobile})
       : super(key: key);
 
   @override
@@ -107,14 +115,18 @@ class HospitalCard extends StatelessWidget {
                           Icons.call,
                           color: Colors.green,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          call(mobile);
+                        },
                       ),
                       IconButton(
                         icon: Icon(
                           Icons.directions,
                           color: Colors.red,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          navigate(latitude, longitude);
+                        },
                       ),
                     ],
                   ),
