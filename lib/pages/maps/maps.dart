@@ -9,7 +9,9 @@ import 'package:hospital_finder/models/hospital.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/universal_widgets/divider.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
+import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
+import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 
 class HospitalListMap extends StatefulWidget {
@@ -144,14 +146,19 @@ class _HospitalListMapState extends State<HospitalListMap> {
                         Icons.call,
                         color: Colors.green,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        call(hospitals[index].mobile);
+                      },
                     ),
                     IconButton(
                       icon: Icon(
                         Icons.directions,
                         color: Colors.red,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        navigate(hospitals[index].latitude,
+                            hospitals[index].longitude);
+                      },
                     )
                   ],
                 )
