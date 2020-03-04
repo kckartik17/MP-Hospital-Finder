@@ -42,7 +42,6 @@ class _ConfigPageState extends State<ConfigPage> {
         Dashboard.routeName: (context) => Dashboard(),
         HospitalList.routeName: (context) => HospitalList(),
         HospitalListMap.routeName: (context) => HospitalListMap(),
-        Description.routeName: (context) => Description()
       },
     );
   }

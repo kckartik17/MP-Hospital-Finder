@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/config/size_config.dart';
+import 'package:hospital_finder/models/hospital.dart';
 import 'package:hospital_finder/notifiers/config_notifier.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/call.dart';
@@ -9,21 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class Description extends StatelessWidget {
-  final String name = "Description Page";
-  final String latitude;
-  final String longitude;
-  final String mobile;
-  static const String routeName = "/description";
-  final hname, state;
+  final Hospital hospital;
 
-  const Description(
-      {Key key,
-      this.hname,
-      this.state,
-      this.latitude,
-      this.longitude,
-      this.mobile})
-      : super(key: key);
+  const Description({Key key, this.hospital}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +21,7 @@ class Description extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return HFscaffold(
-        title: name,
+        title: hospital.name,
         drawerIcon: false,
         body: Stack(
           children: <Widget>[
@@ -71,7 +60,7 @@ class Description extends StatelessWidget {
                                 right: 25.0,
                                 top: 25.0),
                             child: Text(
-                              'Bharat Hosptial',
+                              hospital.name,
                               style: TextStyle(
                                   fontSize: 30.0, fontWeight: FontWeight.bold),
                             ),
@@ -82,7 +71,7 @@ class Description extends StatelessWidget {
                         padding: EdgeInsets.only(
                             left: 35.0, bottom: 25.0, right: 25.0),
                         child: Text(
-                          'Sector:14 Sonepat',
+                          hospital.address,
                           style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w400,
@@ -120,7 +109,7 @@ class Description extends StatelessWidget {
                               color: Colors.green,
                             ),
                             onPressed: () {
-                              call(mobile);
+                              call(hospital.mobile);
                             },
                           ),
                           IconButton(
@@ -129,7 +118,7 @@ class Description extends StatelessWidget {
                               color: Colors.red,
                             ),
                             onPressed: () {
-                              navigate(latitude, longitude);
+                              navigate(hospital.latitude, hospital.longitude);
                             },
                           ),
                         ],

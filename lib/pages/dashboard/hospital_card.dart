@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hospital_finder/models/hospital.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/pages/description_page/Description.dart';
 import 'package:hospital_finder/universal_widgets/divider.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/navigation.dart';
@@ -9,26 +11,9 @@ import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/utils/tools.dart';
 
 class HospitalCard extends StatelessWidget {
-  final Function onTap;
-  final String name;
-  final int distance;
-  final String district;
-  final String state;
-  final String latitude;
-  final String longitude;
-  final String mobile;
+  final Hospital hospital;
 
-  const HospitalCard(
-      {Key key,
-      this.onTap,
-      this.name,
-      this.distance,
-      this.district,
-      this.state,
-      this.latitude,
-      this.longitude,
-      this.mobile})
-      : super(key: key);
+  const HospitalCard({Key key, this.hospital}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +24,16 @@ class HospitalCard extends StatelessWidget {
           EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal * 2),
       child: InkWell(
         borderRadius: BorderRadius.circular(30),
-        onTap: onTap,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Description(
+                hospital: hospital,
+              ),
+            ),
+          );
+        },
         child: Ink(
           height: SizeConfig.blockSizeHorizontal * 60,
           width: SizeConfig.blockSizeHorizontal * 40,
@@ -87,7 +81,7 @@ class HospitalCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     AutoSizeText(
-                      name,
+                      hospital.name,
                       maxLines: 2,
                       style: TextStyle(
                           fontSize: SizeConfig.safeBlockHorizontal * 3.5,
@@ -97,7 +91,7 @@ class HospitalCard extends StatelessWidget {
                       height: 3,
                     ),
                     AutoSizeText(
-                      "$district, $state",
+                      "${hospital.district}, ${hospital.state}",
                       style: TextStyle(
                           fontSize: SizeConfig.safeBlockHorizontal * 2),
                     )
@@ -116,7 +110,7 @@ class HospitalCard extends StatelessWidget {
                           color: Colors.green,
                         ),
                         onPressed: () {
-                          call(mobile);
+                          call(hospital.mobile);
                         },
                       ),
                       IconButton(
@@ -125,7 +119,7 @@ class HospitalCard extends StatelessWidget {
                           color: Colors.red,
                         ),
                         onPressed: () {
-                          navigate(latitude, longitude);
+                          navigate(hospital.latitude, hospital.longitude);
                         },
                       ),
                     ],

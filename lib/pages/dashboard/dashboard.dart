@@ -214,14 +214,8 @@ class _DashboardState extends State<Dashboard> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, i) {
                           return HospitalCard(
-                              name: hospitals[i].name,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, Description.routeName);
-                              },
-                              distance: hospitals[i].index,
-                              district: hospitals[i].district,
-                              state: hospitals[i].state);
+                            hospital: hospitals[i],
+                          );
                         },
                         itemCount: 5,
                       );
