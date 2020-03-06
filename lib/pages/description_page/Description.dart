@@ -21,176 +21,293 @@ class Description extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return HFscaffold(
-        title: hospital.name,
-        drawerIcon: false,
-        body: Stack(
-          children: <Widget>[
-            Container(
-              height: screenHeight,
-              width: screenWidth,
-              color: configBloc.darkOn
-                  ? Tools.hexToColor("#1f2124")
-                  : Colors.white,
-            ),
-            Container(
-              height: 200.0,
+      title: hospital.name,
+      drawerIcon: false,
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: Container(
+              height: 100,
               decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/hospital.jpg'),
-                      fit: BoxFit.cover)),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/hospital.jpg'),
+                    fit: BoxFit.cover),
+              ),
             ),
-            Positioned(
-                top: 150.0,
-                child: Container(
-                  height: screenHeight - 150.0,
-                  width: screenWidth,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(50.0),
-                          topRight: Radius.circular(50.0))),
-                  child: ListView(
+          ),
+          Expanded(
+            flex: 7,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 15,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 35.0,
-                                bottom: 5.0,
-                                right: 25.0,
-                                top: 25.0),
-                            child: Text(
-                              hospital.name,
-                              style: TextStyle(
-                                  fontSize: 30.0, fontWeight: FontWeight.bold),
+                      Flexible(
+                        child: Text(
+                          hospital.name,
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              "3.5",
+                              style:
+                                  TextStyle(color: Colors.green, fontSize: 20),
                             ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 35.0, bottom: 25.0, right: 25.0),
-                        child: Text(
-                          hospital.address,
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xFF9E9E9E)),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 35.0, bottom: 25.0, right: 25.0),
-                        child: Text(
-                          'Description ',
-                          style: TextStyle(
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 35.0, bottom: 25.0, right: 25.0),
-                        child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(
-                              Icons.call,
-                              color: Colors.green,
-                            ),
-                            onPressed: () {
-                              call(hospital.mobile);
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.directions,
-                              color: Colors.red,
-                            ),
-                            onPressed: () {
-                              navigate(hospital.latitude, hospital.longitude);
-                            },
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 125.0, bottom: 12.0, right: 25.0),
-                        child: Text(
-                          'Have you visited yet!',
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 135.0, bottom: 12.0, right: 25.0),
-                        child: Text(
-                          'Share your Experience ',
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xFF9E9E9E)),
-                        ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(
-                            left: 125.0,
-                            bottom: 12.0,
-                            right: 25.0,
-                          ),
-                          child: RatingBar(
-                            initialRating: 0,
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              switch (index) {
-                                case 0:
-                                  return Icon(
-                                    Icons.sentiment_very_dissatisfied,
-                                    color: Colors.red,
-                                  );
-                                case 1:
-                                  return Icon(
-                                    Icons.sentiment_dissatisfied,
-                                    color: Colors.redAccent,
-                                  );
-                                case 2:
-                                  return Icon(
-                                    Icons.sentiment_neutral,
-                                    color: Colors.amber,
-                                  );
-                                case 3:
-                                  return Icon(
-                                    Icons.sentiment_satisfied,
-                                    color: Colors.lightGreen,
-                                  );
-                                case 4:
-                                  return Icon(
-                                    Icons.sentiment_very_satisfied,
-                                    color: Colors.green,
-                                  );
-                              }
-                            },
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                          )),
                     ],
                   ),
-                ))
-          ],
-        ));
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Flexible(
+                          child:
+                              Text("${hospital.district}, ${hospital.state}"))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        "Address",
+                        style: TextStyle(fontSize: 25),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Container(
+                      padding: EdgeInsets.all(25),
+                      child: Text(
+                        "${hospital.address}, ${hospital.district}, ${hospital.state}",
+                        style: TextStyle(fontSize: 17),
+                      ),
+                      height: 100,
+                      width: screenWidth,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.red),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.call,
+                        color: Colors.green,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        "Contact",
+                        style: TextStyle(fontSize: 25),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 38.0),
+                    child: Text("${hospital.mobile}"),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextField(
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            borderSide: BorderSide(
+                                color: configBloc.darkOn
+                                    ? Colors.white
+                                    : Colors.black)),
+                        labelText: "Write a Review",
+                        labelStyle: TextStyle(
+                            color: configBloc.darkOn
+                                ? Colors.white
+                                : Colors.black)),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: configBloc.darkOn
+                                        ? Colors.white
+                                        : Colors.black,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.star_border,
+                                      color: configBloc.darkOn
+                                          ? Colors.black
+                                          : Colors.yellow,
+                                    ),
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20))),
+                                                title: Column(
+                                                  children: <Widget>[
+                                                    Text(
+                                                      "Rate ${hospital.name}",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 25),
+                                                    ),
+                                                    SizedBox(height: 15),
+                                                    RatingBar(
+                                                        initialRating: 0,
+                                                        minRating: 0,
+                                                        direction: Axis
+                                                            .horizontal,
+                                                        allowHalfRating: true,
+                                                        itemCount: 5,
+                                                        itemPadding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    4.0),
+                                                        itemBuilder: (context,
+                                                                _) =>
+                                                            Icon(
+                                                              Icons.star,
+                                                              color:
+                                                                  Colors.amber,
+                                                            ),
+                                                        onRatingUpdate:
+                                                            (rating) {}),
+                                                    SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    RaisedButton(
+                                                      color: Colors.blueAccent,
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        "Submit",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ));
+                                    }),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.call,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      call(hospital.mobile);
+                                    }),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                              flex: 6,
+                              child: RaisedButton(
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                color: Colors.red,
+                                onPressed: () {
+                                  navigate(
+                                      hospital.latitude, hospital.longitude);
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.directions,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "Get Directions",
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

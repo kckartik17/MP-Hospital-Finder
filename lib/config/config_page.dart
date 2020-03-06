@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/pages/authentication/signin.dart';
 import 'package:hospital_finder/pages/dashboard/dashboard.dart';
-import 'package:hospital_finder/pages/description_page/Description.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/pages/maps/maps.dart';
 import 'package:hospital_finder/utils/hf.dart';

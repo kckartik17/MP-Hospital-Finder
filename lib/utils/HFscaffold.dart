@@ -4,7 +4,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/notifiers/config_notifier.dart';
-import 'package:hospital_finder/pages/maps/maps.dart';
 import 'package:provider/provider.dart';
 
 class HFscaffold extends StatelessWidget {
@@ -12,9 +11,15 @@ class HFscaffold extends StatelessWidget {
   final Widget body;
   final SpeedDial fab;
   final bool drawerIcon;
+  final BottomNavigationBar bottomNavigationBar;
 
   const HFscaffold(
-      {Key key, this.title, this.body, this.fab, this.drawerIcon = false})
+      {Key key,
+      this.title,
+      this.body,
+      this.fab,
+      this.drawerIcon = false,
+      this.bottomNavigationBar})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -26,6 +31,8 @@ class HFscaffold extends StatelessWidget {
         top: false,
         bottom: false,
         child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          bottomNavigationBar: bottomNavigationBar ?? null,
           appBar: AppBar(
             automaticallyImplyLeading: drawerIcon ?? false,
             title: Text(title),
