@@ -46,7 +46,7 @@ class HospitalCard extends StatelessWidget {
                     BoxShadow(
                       color: Colors.grey[400],
                       blurRadius: 10,
-                      offset: Offset(0, 10),
+                      offset: Offset(0, 5),
                       spreadRadius: 5,
                     )
                   ]

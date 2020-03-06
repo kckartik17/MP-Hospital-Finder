@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospital.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:hospital_finder/notifiers/config_notifier.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/call.dart';
@@ -22,6 +24,18 @@ class Description extends StatelessWidget {
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: true);
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    List<Marker> markers = [];
+    markers.add(
+      Marker(
+        markerId: MarkerId(hospital.name),
+        draggable: false,
+        infoWindow: InfoWindow(title: hospital.name, snippet: hospital.address),
+        position: LatLng(
+          double.parse(hospital.latitude),
+          double.parse(hospital.longitude),
+        ),
+      ),
+    );
     return HFscaffold(
         title: hospital.name,
         drawerIcon: false,
@@ -58,29 +72,36 @@ class Description extends StatelessWidget {
                                   child: Text(
                                     hospital.name,
                                     style: TextStyle(
-                                        fontSize: ScreenUtil().setSp(45,
+                                        fontSize: ScreenUtil().setSp(42,
                                             allowFontScalingSelf: true),
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                      color: Colors.green[500],
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
                                   child: Column(
                                     children: <Widget>[
                                       Text(
                                         "3.5",
                                         style: TextStyle(
-                                          color: Colors.green,
+                                          color: Colors.white,
                                           fontSize: ScreenUtil().setSp(35,
                                               allowFontScalingSelf: true),
                                         ),
+                                      ),
+                                      Text(
+                                        "rating",
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
-                            ),
-                            SizedBox(
-                              height: 10,
                             ),
                             Row(
                               children: <Widget>[
@@ -128,6 +149,36 @@ class Description extends StatelessWidget {
                                 border: Border.all(color: Colors.red),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(15),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              child: Container(
+                                height: 180,
+                                width: screenWidth,
+                                child: GoogleMap(
+                                  mapType: MapType.normal,
+                                  compassEnabled: false,
+                                  zoomGesturesEnabled: false,
+                                  markers: Set.from(markers),
+                                  initialCameraPosition: CameraPosition(
+                                      target: LatLng(
+                                          double.parse(hospital.latitude),
+                                          double.parse(hospital.longitude)),
+                                      zoom: 14.0),
+                                  onMapCreated:
+                                      (GoogleMapController controller) {
+                                    // _controller = controller;
+                                    print("created");
+
+                                    // changeMapMode();
+                                    // setState(() {
+                                    //   isMapCreated = true;
+                                    // });
+                                  },
                                 ),
                               ),
                             ),
