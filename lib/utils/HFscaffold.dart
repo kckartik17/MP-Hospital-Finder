@@ -31,7 +31,6 @@ class HFscaffold extends StatelessWidget {
         top: false,
         bottom: false,
         child: Scaffold(
-          resizeToAvoidBottomPadding: false,
           bottomNavigationBar: bottomNavigationBar ?? null,
           appBar: AppBar(
             automaticallyImplyLeading: drawerIcon ?? false,
