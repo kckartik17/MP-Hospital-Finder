@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HF {
   static const String app_name = "Hospital Finder";
@@ -11,6 +10,5 @@ class HF {
   static const String google_sans = "GoogleSans";
   static bool isDebugMode = true;
 
-  static SharedPreferences prefs;
   static const String darkModePref = "darkModePref";
 }

@@ -26,7 +26,10 @@ void main() {
           builder: (_) => ConfigBloc(),
         )
       ],
-      child: ConfigPage(),
+      child: AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          curve: Curves.bounceIn,
+          child: ConfigPage()),
     ),
   );
 }

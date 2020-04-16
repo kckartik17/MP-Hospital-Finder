@@ -63,31 +63,10 @@ class _DashboardState extends State<Dashboard> {
                           Icons.edit,
                           size: SizeConfig.safeBlockHorizontal * 4,
                         ),
-                        onPressed: () => showDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (_) => CupertinoAlertDialog(
-                                  content: Text(
-                                    "How to get location ?",
-                                    style: TextStyle(
-                                        fontSize:
-                                            SizeConfig.blockSizeHorizontal * 5),
-                                  ),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: Text("Using GPS"),
-                                      onPressed: () {
-                                        locationBloc.getLocation();
-
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    FlatButton(
-                                      child: Text("Enter Manually"),
-                                      onPressed: () {},
-                                    )
-                                  ],
-                                )),
+                        onPressed: () {
+                          locationBloc.getLocation();
+                          setState(() {});
+                        },
                       )
                     ],
                   ),

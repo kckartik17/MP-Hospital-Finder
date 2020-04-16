@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospital.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -22,7 +21,6 @@ class Description extends StatelessWidget {
   Widget build(BuildContext context) {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: true);
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     List<Marker> markers = [];
     markers.add(
@@ -48,14 +46,17 @@ class Description extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      Container(
-                        height: ScreenUtil().setHeight(300),
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/hospital.jpg'),
-                              fit: BoxFit.cover),
+                      Hero(
+                        tag: "${hospital.name}",
+                        child: Container(
+                          height: ScreenUtil().setHeight(300),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/hospital.jpg'),
+                                fit: BoxFit.cover),
+                          ),
+                          width: screenWidth,
                         ),
-                        width: screenWidth,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(

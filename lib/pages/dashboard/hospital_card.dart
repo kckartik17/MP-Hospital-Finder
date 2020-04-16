@@ -56,18 +56,21 @@ class HospitalCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.zero,
-                height: SizeConfig.blockSizeVertical * 13,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+              Hero(
+                tag: "${hospital.name}",
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  height: SizeConfig.blockSizeVertical * 13,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/hospital.jpg"),
+                        fit: BoxFit.fill),
                   ),
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/background.jpg"),
-                      fit: BoxFit.fill),
                 ),
               ),
               CustomizedDivider(
