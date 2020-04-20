@@ -1,8 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hospital_finder/config/size_config.dart';
+import 'package:hospital_finder/models/cities.dart';
 import 'package:hospital_finder/models/index.dart';
+import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:hospital_finder/utils/navigation.dart';
@@ -121,5 +124,110 @@ class SearchHospitalsDelegate extends SearchDelegate {
           );
       },
     );
+  }
+}
+
+Future<List<District>> loaddistrict() async {
+  QuerySnapshot qs =
+      await Firestore.instance.collection("districtnames").getDocuments();
+  List<District> dist =
+      qs.documents.map((doc) => District.fromFirestore(doc)).toList();
+
+  return dist;
+}
+
+class CitiesDelegate extends SearchDelegate {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    return [
+      IconButton(
+        icon: Icon(
+          Icons.close,
+        ),
+        onPressed: () {
+          query = "";
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        // color: Colors.black,
+        progress: transitionAnimation,
+      ),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    return FutureBuilder(
+        future: loaddistrict(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.hasError || snapshot.data.isEmpty) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            List<District> list = snapshot.data;
+            List<District> filterlist = list.where((district) =>
+                district.name.toLowerCase().contains(query.toLowerCase()));
+            return ListView(
+                children: filterlist
+                    .map<Padding>((district) => Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: ListTile(
+                            title: Text(district.name),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HospitalList(
+                                            district: district.name,
+                                          )));
+                            },
+                          ),
+                        ))
+                    .toList());
+          }
+        });
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    return FutureBuilder(
+        future: loaddistrict(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.hasError || snapshot.data.isEmpty) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            List<District> list = snapshot.data;
+            List<District> filterlist = list.where((district) =>
+                district.name.toLowerCase().contains(query.toLowerCase()));
+            return ListView(
+                children: filterlist
+                    .map<Padding>((district) => Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: ListTile(
+                            title: Text(district.name),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HospitalList(
+                                            district: district.name,
+                                          )));
+                            },
+                          ),
+                        ))
+                    .toList());
+          }
+        });
   }
 }
