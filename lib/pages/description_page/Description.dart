@@ -10,6 +10,7 @@ import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'dart:math';
 
 class Description extends StatelessWidget {
   final Hospital hospital;
@@ -21,6 +22,9 @@ class Description extends StatelessWidget {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: true);
     final screenWidth = MediaQuery.of(context).size.width;
+    Random random = Random();
+    double rating = random.nextDouble() * (5.0 - 1.0) + 1.0;
+    rating = double.parse(rating.toStringAsPrecision(2));
     List<Marker> markers = [];
     markers.add(
       Marker(
@@ -82,13 +86,22 @@ class Description extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
-                                      color: Colors.green[500],
+                                      color: (() {
+                                        if (rating < 2.0) {
+                                          return Colors.red[500];
+                                        } else if (rating >= 2.0 &&
+                                            rating < 3.6) {
+                                          return Colors.yellow[800];
+                                        } else {
+                                          return Colors.green[500];
+                                        }
+                                      }()),
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(8))),
                                   child: Column(
                                     children: <Widget>[
                                       Text(
-                                        "3.5",
+                                        "$rating",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(35,
