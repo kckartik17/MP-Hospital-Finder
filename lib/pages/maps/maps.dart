@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
-import 'package:hospital_finder/models/hospital.dart';
+import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadData.dart';
@@ -12,7 +12,10 @@ import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 
 class HospitalListMap extends StatefulWidget {
+  final String district;
   static const String routeName = "/maps";
+
+  const HospitalListMap({Key key, this.district}) : super(key: key);
   @override
   _HospitalListMapState createState() => _HospitalListMapState();
 }
@@ -24,7 +27,7 @@ class _HospitalListMapState extends State<HospitalListMap> {
   List<Marker> allMarkers = [];
 
   PageController _pageController;
-  List<Hospital> hospitals;
+  List<HospitalFirestore> hospitals;
 
   int prevPage;
 
@@ -32,7 +35,7 @@ class _HospitalListMapState extends State<HospitalListMap> {
   void initState() {
     super.initState();
 
-    loadHospitalList();
+    loadHospitalList(widget.district);
   }
 
   void _onScroll() {
@@ -96,39 +99,18 @@ class _HospitalListMapState extends State<HospitalListMap> {
                   height: SizeConfig.blockSizeVertical * 1,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.directions_car,
-                          size: SizeConfig.blockSizeHorizontal * 3,
-                        ),
-                        SizedBox(
-                          width: 3.0,
-                        ),
-                        Text(
-                          "2.1 km",
-                          style: TextStyle(
-                              fontSize: SizeConfig.safeBlockHorizontal * 3),
-                        )
-                      ],
+                    Icon(
+                      Icons.location_on,
+                      size: SizeConfig.blockSizeHorizontal * 3,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.location_on,
-                          size: SizeConfig.blockSizeHorizontal * 3,
-                        ),
-                        SizedBox(
-                          width: 3.0,
-                        ),
-                        Text(
-                          "${hospitals[index].district}",
-                          style: TextStyle(
-                              fontSize: SizeConfig.safeBlockHorizontal * 3),
-                        )
-                      ],
+                    SizedBox(
+                      width: 3.0,
+                    ),
+                    Text(
+                      "${hospitals[index].district}, ${hospitals[index].state}",
+                      style: TextStyle(
+                          fontSize: SizeConfig.safeBlockHorizontal * 3),
                     )
                   ],
                 ),
@@ -202,11 +184,21 @@ class _HospitalListMapState extends State<HospitalListMap> {
           child: Container(
               height: 200.0,
               width: MediaQuery.of(context).size.width,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: hospitals.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _hospitalList(index);
+              child: FutureBuilder(
+                future: load(widget.district),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData ||
+                      snapshot.hasError ||
+                      snapshot.data.isEmpty)
+                    return Center(child: CircularProgressIndicator());
+
+                  return PageView.builder(
+                    controller: _pageController,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _hospitalList(index);
+                    },
+                  );
                 },
               )),
         ),
@@ -272,8 +264,8 @@ class _HospitalListMapState extends State<HospitalListMap> {
     );
   }
 
-  Future loadHospitalList() async {
-    List<Hospital> _hospitals = await loadHospitals();
+  Future loadHospitalList(district) async {
+    List<HospitalFirestore> _hospitals = await load(district);
 
     setState(() {
       hospitals = _hospitals;

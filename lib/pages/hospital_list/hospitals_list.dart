@@ -30,6 +30,8 @@ class _HospitalListState extends State<HospitalList> {
     return 12742 * asin(sqrt(a));
   }
 
+  List<HospitalFirestore> hospitals;
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -92,8 +94,12 @@ class _HospitalListState extends State<HospitalList> {
             backgroundColor: configBloc.darkOn ? Colors.white : Colors.purple,
             labelStyle: TextStyle(color: Colors.black),
             label: 'View in Maps',
-            onTap: () =>
-                Navigator.pushNamed(context, HospitalListMap.routeName),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HospitalListMap(
+                          district: widget.district,
+                        ))),
           )
         ],
       ),
@@ -104,6 +110,7 @@ class _HospitalListState extends State<HospitalList> {
             return Center(child: CircularProgressIndicator());
           } else {
             List<HospitalFirestore> list = snapshot.data;
+            hospitals = list;
             if (sortbutton) {
               list.sort((a, b) => a.distance.compareTo(b.distance));
             } else {
