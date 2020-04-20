@@ -6,6 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 class LocationBloc with ChangeNotifier {
   var _loc = Location();
   String location = "Unknown Location";
+  double latitude = 28.9885;
+  double longitude = 76.9960;
 
   void getLocation() async {
     try {
@@ -19,6 +21,8 @@ class LocationBloc with ChangeNotifier {
             var addresses =
                 await Geocoder.local.findAddressesFromCoordinates(coordinates);
             location = addresses.first.addressLine;
+            latitude = userLocation.latitude;
+            longitude = userLocation.longitude;
 
             notifyListeners();
           } on Exception catch (e) {
