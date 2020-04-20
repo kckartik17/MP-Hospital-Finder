@@ -12,6 +12,7 @@ import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:hospital_finder/models/hospitalfirestore.dart';
+import 'dart:math' show cos, sqrt, asin;
 
 class Dashboard extends StatefulWidget {
   static const String routeName = "/dashboard";
@@ -20,6 +21,15 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  double calculateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
+
   @override
   Widget build(BuildContext context) {
     LocationBloc locationBloc = Provider.of<LocationBloc>(context);
@@ -177,7 +187,7 @@ class _DashboardState extends State<Dashboard> {
             ),
             SafeArea(
               child: Container(
-                height: SizeConfig.blockSizeHorizontal * 60,
+                height: SizeConfig.blockSizeHorizontal * 65,
                 padding: EdgeInsets.only(
                   left: SizeConfig.blockSizeHorizontal * 2,
                   right: SizeConfig.blockSizeHorizontal * 2,
@@ -186,11 +196,20 @@ class _DashboardState extends State<Dashboard> {
                 child: FutureBuilder(
                   future: load("Sonipat"),
                   builder: (context, snapshot) {
-                    List<HospitalFirestore> hospitals = snapshot.data;
-
-                    if (!snapshot.hasData || snapshot.data.isEmpty)
+                    if (!snapshot.hasData || snapshot.data.isEmpty) {
                       return Center(child: CircularProgressIndicator());
-                    else
+                    } else {
+                      List<HospitalFirestore> hospitals = snapshot.data;
+                      hospitals.forEach((h) {
+                        double dis = calculateDistance(
+                            locationBloc.latitude,
+                            locationBloc.longitude,
+                            double.parse(h.latitude),
+                            double.parse(h.longitude));
+                        h.distance = double.parse(dis.toStringAsPrecision(3));
+                      });
+                      hospitals
+                          .sort((a, b) => a.distance.compareTo(b.distance));
                       return ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, i) {
@@ -200,6 +219,7 @@ class _DashboardState extends State<Dashboard> {
                         },
                         itemCount: snapshot.data.length,
                       );
+                    }
                   },
                 ),
               ),

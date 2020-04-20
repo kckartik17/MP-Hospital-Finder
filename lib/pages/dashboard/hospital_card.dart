@@ -85,7 +85,9 @@ class HospitalCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     AutoSizeText(
-                      hospital.name,
+                      hospital.name.length < 42
+                          ? hospital.name
+                          : "${hospital.name.substring(0, 42)}...",
                       maxLines: 2,
                       style: TextStyle(
                           fontSize: SizeConfig.safeBlockHorizontal * 3.5,
@@ -98,6 +100,25 @@ class HospitalCard extends StatelessWidget {
                       "${hospital.district}, ${hospital.state}",
                       style: TextStyle(
                           fontSize: SizeConfig.safeBlockHorizontal * 2),
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.directions_car,
+                          size: SizeConfig.blockSizeHorizontal * 3,
+                        ),
+                        SizedBox(
+                          width: 3.0,
+                        ),
+                        Text(
+                          "${hospital.distance} km",
+                          style: TextStyle(
+                              fontSize: SizeConfig.safeBlockHorizontal * 3),
+                        )
+                      ],
                     )
                   ],
                 ),
