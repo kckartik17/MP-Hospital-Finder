@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hospital_finder/models/district.dart';
+import 'package:hospital_finder/models/hospitalfirestore.dart';
 
 Future<List<Hospital>> loadHospitals() async {
   String content = await rootBundle.loadString('assets/hospitals.json');
@@ -21,4 +22,18 @@ Future<List<District>> loadDistricts() async {
       qs.documents.map((doc) => District.fromFirestore(doc)).toList();
 
   return dist;
+}
+
+Future<List<HospitalFirestore>> load(district) async {
+  QuerySnapshot qs = await Firestore.instance
+      .collection("district")
+      .document(district)
+      .collection("hospitals")
+      .getDocuments();
+  List<HospitalFirestore> hos =
+      qs.documents.map((doc) => HospitalFirestore.fromFirestore(doc)).toList();
+
+  hos.sort((a, b) => a.name.compareTo(b.name));
+
+  return hos;
 }

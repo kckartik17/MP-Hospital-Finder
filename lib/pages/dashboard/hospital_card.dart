@@ -9,9 +9,10 @@ import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/utils/tools.dart';
+import 'package:hospital_finder/models/hospitalfirestore.dart';
 
 class HospitalCard extends StatelessWidget {
-  final Hospital hospital;
+  final HospitalFirestore hospital;
 
   const HospitalCard({Key key, this.hospital}) : super(key: key);
 

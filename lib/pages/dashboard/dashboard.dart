@@ -11,6 +11,7 @@ import 'package:hospital_finder/utils/loadData.dart';
 import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
+import 'package:hospital_finder/models/hospitalfirestore.dart';
 
 class Dashboard extends StatefulWidget {
   static const String routeName = "/dashboard";
@@ -183,9 +184,10 @@ class _DashboardState extends State<Dashboard> {
                   bottom: SizeConfig.blockSizeHorizontal * 3,
                 ),
                 child: FutureBuilder(
-                  future: loadHospitals(),
+                  future: load("Sonipat"),
                   builder: (context, snapshot) {
-                    List<Hospital> hospitals = snapshot.data;
+                    List<HospitalFirestore> hospitals = snapshot.data;
+
                     if (!snapshot.hasData || snapshot.data.isEmpty)
                       return Center(child: CircularProgressIndicator());
                     else
@@ -196,7 +198,7 @@ class _DashboardState extends State<Dashboard> {
                             hospital: hospitals[i],
                           );
                         },
-                        itemCount: 5,
+                        itemCount: snapshot.data.length,
                       );
                   },
                 ),

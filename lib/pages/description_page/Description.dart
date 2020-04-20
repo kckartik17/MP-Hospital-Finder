@@ -11,9 +11,10 @@ import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'dart:math';
+import 'package:hospital_finder/models/hospitalfirestore.dart';
 
 class Description extends StatelessWidget {
-  final Hospital hospital;
+  final HospitalFirestore hospital;
 
   const Description({Key key, this.hospital}) : super(key: key);
 

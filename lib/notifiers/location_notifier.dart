@@ -16,7 +16,6 @@ class LocationBloc with ChangeNotifier {
   void getLocation() async {
     try {
       _loc.requestPermission().then((granted) async {
-        print(granted);
         if (granted) {
           try {
             var userLocation = await _loc.getLocation();
