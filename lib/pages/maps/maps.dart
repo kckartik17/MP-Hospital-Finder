@@ -7,7 +7,7 @@ import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospital.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/utils/call.dart';
-import 'package:hospital_finder/utils/loadHospitals.dart';
+import 'package:hospital_finder/utils/loadData.dart';
 import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
 

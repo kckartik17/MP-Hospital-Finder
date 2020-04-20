@@ -6,7 +6,6 @@ import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospitalfirestore.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/maps/maps.dart';
-import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' show cos, sqrt, asin;
 

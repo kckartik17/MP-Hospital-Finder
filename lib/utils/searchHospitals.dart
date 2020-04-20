@@ -3,11 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hospital_finder/config/size_config.dart';
-import 'package:hospital_finder/models/cities.dart';
+import 'package:hospital_finder/models/district.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/call.dart';
-import 'package:hospital_finder/utils/loadHospitals.dart';
+import 'package:hospital_finder/utils/loadData.dart';
 import 'package:hospital_finder/utils/navigation.dart';
 
 class SearchHospitalsDelegate extends SearchDelegate {
@@ -127,19 +127,14 @@ class SearchHospitalsDelegate extends SearchDelegate {
   }
 }
 
-Future<List<District>> loaddistrict() async {
-  QuerySnapshot qs =
-      await Firestore.instance.collection("districtnames").getDocuments();
-  List<District> dist =
-      qs.documents.map((doc) => District.fromFirestore(doc)).toList();
-
-  return dist;
-}
-
 class CitiesDelegate extends SearchDelegate {
   @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context);
+  }
+
+  @override
   List<Widget> buildActions(BuildContext context) {
-    // TODO: implement buildActions
     return [
       IconButton(
         icon: Icon(
@@ -154,29 +149,25 @@ class CitiesDelegate extends SearchDelegate {
 
   @override
   Widget buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
     return IconButton(
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        // color: Colors.black,
-        progress: transitionAnimation,
-      ),
+      icon: Icon(Icons.arrow_back),
       onPressed: () => close(context, null),
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
     return FutureBuilder(
-        future: loaddistrict(),
+        future: loadDistricts(),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.hasError || snapshot.data.isEmpty) {
             return Center(child: CircularProgressIndicator());
           } else {
             List<District> list = snapshot.data;
-            List<District> filterlist = list.where((district) =>
-                district.name.toLowerCase().contains(query.toLowerCase()));
+            List<District> filterlist = list
+                .where((district) =>
+                    district.name.toLowerCase().contains(query.toLowerCase()))
+                .toList();
             return ListView(
                 children: filterlist
                     .map<Padding>((district) => Padding(
@@ -200,16 +191,17 @@ class CitiesDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
     return FutureBuilder(
-        future: loaddistrict(),
+        future: loadDistricts(),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.hasError || snapshot.data.isEmpty) {
             return Center(child: CircularProgressIndicator());
           } else {
             List<District> list = snapshot.data;
-            List<District> filterlist = list.where((district) =>
-                district.name.toLowerCase().contains(query.toLowerCase()));
+            List<District> filterlist = list
+                .where((district) =>
+                    district.name.toLowerCase().contains(query.toLowerCase()))
+                .toList();
             return ListView(
                 children: filterlist
                     .map<Padding>((district) => Padding(
@@ -217,6 +209,7 @@ class CitiesDelegate extends SearchDelegate {
                           child: ListTile(
                             title: Text(district.name),
                             onTap: () {
+                              query = district.name;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

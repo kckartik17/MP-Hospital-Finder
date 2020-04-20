@@ -7,7 +7,7 @@ import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/dashboard/hospital_card.dart';
 import 'package:hospital_finder/pages/hospital_list/cities.dart';
-import 'package:hospital_finder/utils/loadHospitals.dart';
+import 'package:hospital_finder/utils/loadData.dart';
 import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
@@ -133,7 +133,7 @@ class _DashboardState extends State<Dashboard> {
                           onTap: () => showSearch(
                               context: context,
                               delegate: SearchHospitalsDelegate()),
-                          child: Text("Search Hospitals...")),
+                          child: Text("Search All Hospitals...")),
                       trailing: IconButton(
                         icon: Icon(Icons.search),
                         onPressed: () => showSearch(
@@ -153,7 +153,7 @@ class _DashboardState extends State<Dashboard> {
                         "Best Hospitals nearby you",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: SizeConfig.blockSizeHorizontal * 3.8),
+                            fontSize: SizeConfig.blockSizeHorizontal * 4),
                       ),
                       InkWell(
                         onTap: () => Navigator.push(
@@ -163,7 +163,7 @@ class _DashboardState extends State<Dashboard> {
                         child: Text(
                           "See More",
                           style: TextStyle(
-                              fontSize: SizeConfig.blockSizeHorizontal * 3),
+                              fontSize: SizeConfig.blockSizeHorizontal * 3.5),
                         ),
                       ),
                     ],
