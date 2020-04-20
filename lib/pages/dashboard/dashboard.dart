@@ -6,6 +6,7 @@ import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/dashboard/hospital_card.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
+import 'package:hospital_finder/pages/showallHospitals/cities.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:hospital_finder/utils/searchHospitals.dart';
@@ -155,8 +156,10 @@ class _DashboardState extends State<Dashboard> {
                             fontSize: SizeConfig.blockSizeHorizontal * 3.8),
                       ),
                       InkWell(
-                        onTap: () => Navigator.pushNamed(
-                            context, HospitalList.routeName),
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Citieslist())),
                         child: Text(
                           "See More",
                           style: TextStyle(

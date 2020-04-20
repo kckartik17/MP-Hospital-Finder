@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "633032644147",
+    "firebase_url": "https://hf-app-67719.firebaseio.com",
+    "project_id": "hf-app-67719",
+    "storage_bucket": "hf-app-67719.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633032644147:android:00f95b82a9073fa2f77546",
+        "android_client_info": {
+          "package_name": "com.example.hospital_finder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633032644147-8pfol108kjg6rmka8r13angjh6e1mhlf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSycM1LXhfCK9mSKkEjocAAEeBw2LSzng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633032644147-8pfol108kjg6rmka8r13angjh6e1mhlf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
