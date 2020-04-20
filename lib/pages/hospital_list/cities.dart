@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hospital_finder/models/cities.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
+import 'package:hospital_finder/utils/searchHospitals.dart';
 
 class Citieslist extends StatefulWidget {
   @override
@@ -8,32 +10,47 @@ class Citieslist extends StatefulWidget {
 }
 
 class _CitieslistState extends State<Citieslist> {
+  Future<List<District>> loaddistrict() async {
+    QuerySnapshot qs =
+        await Firestore.instance.collection("districtnames").getDocuments();
+    List<District> dist =
+        qs.documents.map((doc) => District.fromFirestore(doc)).toList();
+
+    return dist;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Cities"),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () =>
+                  showSearch(context: context, delegate: CitiesDelegate()))
+        ],
       ),
-      body: StreamBuilder(
-          stream: Firestore.instance.collection("districtnames").snapshots(),
+      body: FutureBuilder(
+          future: loaddistrict(),
           builder: (context, snapshot) {
             if (!snapshot.hasData ||
                 snapshot.hasError ||
-                snapshot.data.documents.isEmpty) {
+                snapshot.data.isEmpty) {
               return Center(child: CircularProgressIndicator());
             } else {
+              List<District> list = snapshot.data;
               return ListView.builder(
-                itemCount: snapshot.data.documents.length,
+                itemCount: list.length,
                 itemBuilder: (context, i) {
                   return ListTile(
-                    title: Text("${snapshot.data.documents[i]["name"]}"),
+                    title: Text(list[i].name),
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => HospitalList(
-                                    district: snapshot.data.documents[i]
-                                        ["name"],
+                                    district: list[i].name,
                                   )));
                     },
                   );
