@@ -14,6 +14,7 @@ class HospitalListFirestore extends StatefulWidget {
 }
 
 class _HospitalListFirestoreState extends State<HospitalListFirestore> {
+  bool sortbutton = false;
   double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;
@@ -54,7 +55,11 @@ class _HospitalListFirestoreState extends State<HospitalListFirestore> {
             return Center(child: CircularProgressIndicator());
           } else {
             List<HospitalFirestore> list = snapshot.data;
-            list.sort((a, b) => a.distance.compareTo(b.distance));
+            if (sortbutton) {
+              list.sort((a, b) => a.distance.compareTo(b.distance));
+            } else {
+              list.sort((a, b) => a.name.compareTo(b.name));
+            }
             return ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
@@ -69,7 +74,11 @@ class _HospitalListFirestoreState extends State<HospitalListFirestore> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            sortbutton = true;
+          });
+        },
         child: Text("Sort"),
       ),
     );

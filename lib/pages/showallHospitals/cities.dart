@@ -31,7 +31,7 @@ class _CitieslistState extends State<Citieslist> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HospitalListFirestore(
+                              builder: (context) => HospitalList(
                                     district: snapshot.data.documents[i]
                                         ["name"],
                                   )));
