@@ -17,9 +17,9 @@ class _CitieslistState extends State<Citieslist> {
       body: StreamBuilder(
           stream: Firestore.instance.collection("districtnames").snapshots(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData &&
-                snapshot.hasError &&
-                snapshot.data.length < 1) {
+            if (!snapshot.hasData ||
+                snapshot.hasError ||
+                snapshot.data.documents.isEmpty) {
               return Center(child: CircularProgressIndicator());
             } else {
               return ListView.builder(

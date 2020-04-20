@@ -46,6 +46,15 @@ class _HospitalListState extends State<HospitalList> {
           .map((doc) => HospitalFirestore.fromFirestore(doc))
           .toList();
 
+      hos.forEach((h) {
+        double dis = calculateDistance(
+            locationBloc.latitude,
+            locationBloc.longitude,
+            double.parse(h.latitude),
+            double.parse(h.longitude));
+        h.distance = double.parse(dis.toStringAsPrecision(3));
+      });
+
       return hos;
     }
 
@@ -60,14 +69,6 @@ class _HospitalListState extends State<HospitalList> {
         elevation: 8.0,
         shape: CircleBorder(),
         children: [
-          SpeedDialChild(
-            child: Icon(Icons.search),
-            backgroundColor: configBloc.darkOn ? Colors.white : Colors.green,
-            labelStyle: TextStyle(color: Colors.black),
-            label: 'Search',
-            onTap: () => showSearch(
-                context: context, delegate: SearchHospitalsDelegate()),
-          ),
           SpeedDialChild(
             child: Icon(Icons.directions),
             backgroundColor: configBloc.darkOn ? Colors.white : Colors.red,
@@ -92,22 +93,11 @@ class _HospitalListState extends State<HospitalList> {
       body: FutureBuilder(
         future: load(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData &&
-              snapshot.hasError &&
-              snapshot.data.length == 0) {
+          if (!snapshot.hasData || snapshot.hasError || snapshot.data.isEmpty) {
             return Center(child: CircularProgressIndicator());
           } else {
             List<HospitalFirestore> list = snapshot.data;
             if (sortbutton) {
-              locationBloc.getLocation();
-              list.forEach((h) {
-                double dis = calculateDistance(
-                    locationBloc.latitude,
-                    locationBloc.longitude,
-                    double.parse(h.latitude),
-                    double.parse(h.longitude));
-                h.distance = double.parse(dis.toStringAsPrecision(3));
-              });
               list.sort((a, b) => a.distance.compareTo(b.distance));
             } else {
               list.sort((a, b) => a.name.compareTo(b.name));

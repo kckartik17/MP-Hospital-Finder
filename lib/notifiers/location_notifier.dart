@@ -9,6 +9,10 @@ class LocationBloc with ChangeNotifier {
   double latitude = 28.9885;
   double longitude = 76.9960;
 
+  LocationBloc() {
+    getLocation();
+  }
+
   void getLocation() async {
     try {
       _loc.requestPermission().then((granted) async {
