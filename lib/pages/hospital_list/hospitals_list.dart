@@ -1,22 +1,15 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospitalfirestore.dart';
-import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/maps/maps.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
-import 'package:hospital_finder/utils/call.dart';
-import 'package:hospital_finder/utils/loadHospitals.dart';
-import 'package:hospital_finder/utils/navigation.dart';
 import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:provider/provider.dart';
-import 'dart:math' show cos, sqrt, sin, asin, pi, atan2;
-// import 'package:vector_math/vector_math.dart';
+import 'dart:math' show cos, sqrt, asin;
 
 class HospitalList extends StatefulWidget {
   final String district;
@@ -38,29 +31,25 @@ class _HospitalListState extends State<HospitalList> {
     return 12742 * asin(sqrt(a));
   }
 
-  Future<List<HospitalFirestore>> load() async {
-    QuerySnapshot qs = await Firestore.instance
-        .collection("district")
-        .document(widget.district)
-        .collection("hospitals")
-        .getDocuments();
-    List<HospitalFirestore> hos = qs.documents
-        .map((doc) => HospitalFirestore.fromFirestore(doc))
-        .toList();
-    hos.forEach((h) {
-      double dis = calculateDistance(28.9885, 76.9960, double.parse(h.latitude),
-          double.parse(h.longitude));
-      // print(dis / 1000);
-      h.distance = double.parse(dis.toStringAsPrecision(3));
-    });
-    return hos;
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     LocationBloc locationBloc = Provider.of<LocationBloc>(context);
+
+    Future<List<HospitalFirestore>> load() async {
+      QuerySnapshot qs = await Firestore.instance
+          .collection("district")
+          .document(widget.district)
+          .collection("hospitals")
+          .getDocuments();
+      List<HospitalFirestore> hos = qs.documents
+          .map((doc) => HospitalFirestore.fromFirestore(doc))
+          .toList();
+
+      return hos;
+    }
+
     return HFscaffold(
       title: "Search Hospitals",
       fab: SpeedDial(
@@ -102,11 +91,22 @@ class _HospitalListState extends State<HospitalList> {
       body: FutureBuilder(
         future: load(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (!snapshot.hasData &&
+              snapshot.hasError &&
+              snapshot.data.length == 0) {
             return Center(child: CircularProgressIndicator());
           } else {
             List<HospitalFirestore> list = snapshot.data;
             if (sortbutton) {
+              locationBloc.getLocation();
+              list.forEach((h) {
+                double dis = calculateDistance(
+                    locationBloc.latitude,
+                    locationBloc.longitude,
+                    double.parse(h.latitude),
+                    double.parse(h.longitude));
+                h.distance = double.parse(dis.toStringAsPrecision(3));
+              });
               list.sort((a, b) => a.distance.compareTo(b.distance));
             } else {
               list.sort((a, b) => a.name.compareTo(b.name));
@@ -116,7 +116,9 @@ class _HospitalListState extends State<HospitalList> {
                 return ListTile(
                   title: Text("${list[index].name}"),
                   subtitle: Text("${list[index].address}"),
-                  trailing: Text("${list[index].distance} kms"),
+                  trailing: sortbutton == true
+                      ? Text("${list[index].distance} kms")
+                      : null,
                 );
               },
               itemCount: list.length,

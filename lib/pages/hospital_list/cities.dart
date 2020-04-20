@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
-import 'package:hospital_finder/pages/showallHospitals/hospitals.dart';
 import 'package:hospital_finder/utils/HFscaffold.dart';
 
 class Citieslist extends StatefulWidget {
@@ -18,8 +17,9 @@ class _CitieslistState extends State<Citieslist> {
       body: StreamBuilder(
           stream: Firestore.instance.collection("districtnames").snapshots(),
           builder: (context, snapshot) {
-            print(snapshot.data.documents.length);
-            if (!snapshot.hasData) {
+            if (!snapshot.hasData &&
+                snapshot.hasError &&
+                snapshot.data.length < 1) {
               return Center(child: CircularProgressIndicator());
             } else {
               return ListView.builder(
