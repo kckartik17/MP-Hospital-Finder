@@ -8,6 +8,7 @@ import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/maps/maps.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' show cos, sqrt, asin;
+import 'package:hospital_finder/utils/searchHospitals.dart';
 
 class HospitalList extends StatefulWidget {
   final String district;
@@ -60,6 +61,13 @@ class _HospitalListState extends State<HospitalList> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Search in ${widget.district}"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(
+                context: context, delegate: HospitalsDelegate(widget.district)),
+          )
+        ],
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,

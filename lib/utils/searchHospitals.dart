@@ -9,6 +9,7 @@ import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadData.dart';
 import 'package:hospital_finder/utils/navigation.dart';
+import 'package:hospital_finder/models/hospitalfirestore.dart';
 
 class SearchHospitalsDelegate extends SearchDelegate {
   @override
@@ -222,5 +223,109 @@ class CitiesDelegate extends SearchDelegate {
                     .toList());
           }
         });
+  }
+}
+
+class HospitalsDelegate extends SearchDelegate {
+  final String district;
+
+  HospitalsDelegate(this.district);
+
+  Future<List<HospitalFirestore>> load() async {
+    QuerySnapshot qs = await Firestore.instance
+        .collection("district")
+        .document(district)
+        .collection("hospitals")
+        .getDocuments();
+    List<HospitalFirestore> hos = qs.documents
+        .map((doc) => HospitalFirestore.fromFirestore(doc))
+        .toList();
+
+    return hos;
+  }
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context);
+  }
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(
+          Icons.close,
+        ),
+        onPressed: () {
+          query = "";
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return FutureBuilder(
+      future: load(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.hasError || snapshot.data.isEmpty) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          List<HospitalFirestore> list = snapshot.data;
+          List<HospitalFirestore> filteredList = list
+              .where((hospital) =>
+                  hospital.name.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+
+          return ListView(
+            children: filteredList
+                .map<ListTile>((hospital) => ListTile(
+                      title: Text(hospital.name),
+                      onTap: () {
+                        query = hospital.name;
+                      },
+                    ))
+                .toList(),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return FutureBuilder(
+      future: load(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.hasError || snapshot.data.isEmpty) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          List<HospitalFirestore> list = snapshot.data;
+          List<HospitalFirestore> filteredList = list
+              .where((hospital) =>
+                  hospital.name.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+
+          return ListView(
+            children: filteredList
+                .map<ListTile>((hospital) => ListTile(
+                      title: Text(hospital.name),
+                      onTap: () {
+                        query = hospital.name;
+                      },
+                    ))
+                .toList(),
+          );
+        }
+      },
+    );
   }
 }
