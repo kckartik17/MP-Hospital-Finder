@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/pages/dashboard/dashboard.dart';
-import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/universal_widgets/auth_button.dart';
 
 class SignIn extends StatelessWidget {
@@ -10,8 +9,8 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return HFscaffold(
-      title: "Sign In",
+    return Scaffold(
+      appBar: AppBar(title: Text("Sign In")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

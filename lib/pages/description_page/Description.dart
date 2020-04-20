@@ -6,7 +6,6 @@ import 'package:hospital_finder/models/hospital.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:hospital_finder/notifiers/config_notifier.dart';
-import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/navigation.dart';
 import 'package:provider/provider.dart';
@@ -34,9 +33,10 @@ class Description extends StatelessWidget {
         ),
       ),
     );
-    return HFscaffold(
-        title: hospital.name,
-        drawerIcon: false,
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(hospital.name),
+        ),
         body: Stack(
           children: <Widget>[
             Positioned.fill(

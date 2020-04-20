@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/dashboard/hospital_card.dart';
 import 'package:hospital_finder/pages/hospital_list/cities.dart';
-import 'package:hospital_finder/utils/HFscaffold.dart';
 import 'package:hospital_finder/utils/loadHospitals.dart';
 import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:hospital_finder/utils/tools.dart';
@@ -24,9 +24,10 @@ class _DashboardState extends State<Dashboard> {
     LocationBloc locationBloc = Provider.of<LocationBloc>(context);
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     SizeConfig().init(context);
-    return HFscaffold(
-      drawerIcon: true,
-      title: "Dashboard",
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Dashboard"),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -201,6 +202,44 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
             )
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text(
+                "Hospital Finder",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: SizeConfig.safeBlockHorizontal * 5,
+                    letterSpacing: SizeConfig.safeBlockHorizontal * 0.8),
+              ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.purple[600], Colors.purple[200]],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight),
+              ),
+            ),
+            ListTile(
+              title: Text("Dark Mode"),
+              trailing: CupertinoSwitch(
+                value: configBloc.darkOn,
+                onChanged: (value) {
+                  configBloc.reverseDarkMode();
+                },
+                activeColor: Colors.purple,
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.reply),
+              title: Text("Exit"),
+              onTap: () =>
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+            ),
           ],
         ),
       ),
