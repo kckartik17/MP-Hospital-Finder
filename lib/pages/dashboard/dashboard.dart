@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +15,8 @@ import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
 import 'package:hospital_finder/models/hospitalfirestore.dart';
 import 'dart:math' show cos, sqrt, asin;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/painting.dart';
 
 class Dashboard extends StatefulWidget {
   static const String routeName = "/dashboard";
@@ -30,6 +34,7 @@ class _DashboardState extends State<Dashboard> {
     return 12742 * asin(sqrt(a));
   }
 
+  bool signin = false;
   @override
   Widget build(BuildContext context) {
     LocationBloc locationBloc = Provider.of<LocationBloc>(context);
@@ -38,6 +43,69 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Dashboard"),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              showCupertinoModalPopup(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  context: context,
+                  builder: (context) {
+                    if (signin) {
+                      return CupertinoActionSheet(
+                        cancelButton: CupertinoActionSheetAction(
+                          child: Text("Cancel"),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        title: Text("Sign Out"),
+                        message: Text("Do you want to sign out ?"),
+                        actions: <Widget>[
+                          CupertinoActionSheetAction(
+                            child: Text("Sign Out"),
+                            onPressed: () {
+                              setState(() {
+                                signin = !signin;
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    }
+
+                    return CupertinoActionSheet(
+                      title: Text("Sign in"),
+                      message:
+                          Text("Please select any method from options below"),
+                      cancelButton: CupertinoActionSheetAction(
+                        child: Text("Cancel"),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      actions: <Widget>[
+                        CupertinoActionSheetAction(
+                          child: Text("Google"),
+                          onPressed: () {
+                            setState(() {
+                              signin = !signin;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        CupertinoActionSheetAction(
+                          child: Text(
+                            "Facebook",
+                            style: TextStyle(color: Colors.indigo[800]),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  });
+            },
+            icon: Icon(FontAwesomeIcons.user),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
