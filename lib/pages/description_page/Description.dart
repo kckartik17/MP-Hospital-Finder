@@ -329,7 +329,7 @@ class Description extends StatelessWidget {
                                               "Rate ${hospital.name}",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 25),
+                                                  fontSize: 20),
                                             ),
                                             SizedBox(height: 15),
                                             RatingBar(

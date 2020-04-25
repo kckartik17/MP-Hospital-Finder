@@ -53,7 +53,8 @@ class _DashboardState extends State<Dashboard> {
                     if (signin) {
                       return CupertinoActionSheet(
                         cancelButton: CupertinoActionSheetAction(
-                          child: Text("Cancel"),
+                          child: Text("Cancel",
+                              style: TextStyle(color: Colors.blue)),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         title: Text("Sign Out"),
@@ -77,7 +78,8 @@ class _DashboardState extends State<Dashboard> {
                       message:
                           Text("Please select any method from options below"),
                       cancelButton: CupertinoActionSheetAction(
-                        child: Text("Cancel"),
+                        child: Text("Cancel",
+                            style: TextStyle(color: Colors.blue)),
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                       actions: <Widget>[
@@ -92,8 +94,8 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         CupertinoActionSheetAction(
                           child: Text(
-                            "Facebook",
-                            style: TextStyle(color: Colors.indigo[800]),
+                            "Phone",
+                            style: TextStyle(color: Colors.green),
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
