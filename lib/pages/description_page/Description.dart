@@ -318,7 +318,7 @@ class Description extends StatelessWidget {
                                 context: context,
                                 builder: (_) => BackdropFilter(
                                       filter: ImageFilter.blur(
-                                          sigmaY: 5, sigmaX: 5),
+                                          sigmaY: 15, sigmaX: 15),
                                       child: AlertDialog(
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
@@ -346,11 +346,14 @@ class Description extends StatelessWidget {
                                                       Icons.star,
                                                       color: Colors.amber,
                                                     ),
-                                                onRatingUpdate: (rating) {}),
+                                                onRatingUpdate: (rating) {
+                                                  print(rating);
+                                                }),
                                             SizedBox(
                                               height: 15,
                                             ),
                                             RaisedButton(
+                                              shape: StadiumBorder(),
                                               color: Colors.blueAccent,
                                               onPressed: () {
                                                 Navigator.pop(context);
