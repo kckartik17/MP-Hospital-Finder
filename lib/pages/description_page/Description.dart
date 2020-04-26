@@ -1,8 +1,8 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hospital_finder/models/hospital.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:hospital_finder/notifiers/config_notifier.dart';
@@ -13,13 +13,34 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'dart:math';
 import 'package:hospital_finder/models/hospitalfirestore.dart';
 
-class Description extends StatelessWidget {
+class Description extends StatefulWidget {
   final HospitalFirestore hospital;
 
   const Description({Key key, this.hospital}) : super(key: key);
+  @override
+  _DescriptionState createState() => _DescriptionState();
+}
+
+class _DescriptionState extends State<Description> {
+  TextEditingController reviewController;
+  FocusNode focusNode;
+  @override
+  void initState() {
+    super.initState();
+    reviewController = TextEditingController();
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    reviewController.dispose();
+    focusNode.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final HospitalFirestore hospital = widget.hospital;
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: true);
     final screenWidth = MediaQuery.of(context).size.width;
@@ -236,6 +257,8 @@ class Description extends StatelessWidget {
                               height: 25,
                             ),
                             TextField(
+                              focusNode: focusNode,
+                              controller: reviewController,
                               maxLines: 2,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -253,6 +276,20 @@ class Description extends StatelessWidget {
                                         : Colors.black),
                               ),
                             ),
+                            SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.center,
+                              child: FlatButton(
+                                  onPressed: () {
+                                    reviewController.clear();
+                                    FocusScope.of(context)
+                                        .requestFocus(new FocusNode());
+                                  },
+                                  child: Text(
+                                    "Submit",
+                                    style: TextStyle(color: Colors.blue[300]),
+                                  )),
+                            )
                           ],
                         ),
                       ),
@@ -261,137 +298,138 @@ class Description extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 18,
-              left: 15,
-              right: 15,
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: Container(
-                    height: 80,
-                    width: screenWidth,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300.withOpacity(0.3),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            call(hospital.mobile);
-                          },
-                          child: Column(
+            !focusNode.hasFocus
+                ? Positioned(
+                    bottom: 18,
+                    left: 15,
+                    right: 15,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                        child: Container(
+                          height: 80,
+                          width: screenWidth,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300.withOpacity(0.3),
+                          ),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              CircleAvatar(
-                                backgroundColor: Colors.white60,
-                                child: Icon(
-                                  Icons.call,
-                                  color: configBloc.darkOn
-                                      ? Colors.black
-                                      : Colors.green,
-                                ),
-                              ),
-                              Text("Call")
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () =>
-                              navigate(hospital.latitude, hospital.longitude),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              CircleAvatar(
-                                backgroundColor: Colors.white60,
-                                child: Icon(Icons.directions),
-                              ),
-                              Text("Get Directions")
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (_) => BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                          sigmaY: 15, sigmaX: 15),
-                                      child: AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                        title: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              "Rate ${hospital.name}",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
-                                            ),
-                                            SizedBox(height: 15),
-                                            RatingBar(
-                                                initialRating: 0,
-                                                minRating: 0,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemCount: 5,
-                                                itemPadding:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 4.0),
-                                                itemBuilder: (context, _) =>
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                    ),
-                                                onRatingUpdate: (rating) {
-                                                  print(rating);
-                                                }),
-                                            SizedBox(
-                                              height: 15,
-                                            ),
-                                            RaisedButton(
-                                              shape: StadiumBorder(),
-                                              color: Colors.blueAccent,
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                "Submit",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                              GestureDetector(
+                                onTap: () {
+                                  call(hospital.mobile);
+                                },
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundColor: Colors.white60,
+                                      child: Icon(
+                                        Icons.call,
+                                        color: configBloc.darkOn
+                                            ? Colors.black
+                                            : Colors.green,
                                       ),
-                                    ));
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              CircleAvatar(
-                                backgroundColor: Colors.white60,
-                                child: Icon(
-                                  Icons.star_half,
-                                  color: configBloc.darkOn
-                                      ? Colors.black
-                                      : Colors.blue,
+                                    ),
+                                    Text("Call")
+                                  ],
                                 ),
                               ),
-                              Text("Add review")
+                              GestureDetector(
+                                onTap: () => navigate(
+                                    hospital.latitude, hospital.longitude),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundColor: Colors.white60,
+                                      child: Icon(Icons.directions),
+                                    ),
+                                    Text("Get Directions")
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showCupertinoModalPopup(
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 10, sigmaY: 10),
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))),
+                                      title: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            "Rate ${hospital.name}",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          ),
+                                          SizedBox(height: 15),
+                                          RatingBar(
+                                              initialRating: 0,
+                                              minRating: 0,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              itemPadding: EdgeInsets.symmetric(
+                                                  horizontal: 4.0),
+                                              itemBuilder: (context, _) => Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                  ),
+                                              onRatingUpdate: (rating) {
+                                                print(rating);
+                                              }),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          FlatButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              "Submit",
+                                              style: TextStyle(
+                                                  color: Colors.blueAccent,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundColor: Colors.white60,
+                                      child: Icon(
+                                        Icons.star_half,
+                                        color: configBloc.darkOn
+                                            ? Colors.black
+                                            : Colors.blue,
+                                      ),
+                                    ),
+                                    Text("Add review")
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-            )
-          ],
+                  )
+                : null
+          ].where((child) => child != null).toList(),
         ));
   }
 }

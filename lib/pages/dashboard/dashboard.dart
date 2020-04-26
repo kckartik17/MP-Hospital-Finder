@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/dashboard/hospital_card.dart';
 import 'package:hospital_finder/pages/hospital_list/cities.dart';
+import 'package:hospital_finder/utils/day_night_switch.dart';
 import 'package:hospital_finder/utils/loadData.dart';
 import 'package:hospital_finder/utils/searchHospitals.dart';
 import 'package:hospital_finder/utils/tools.dart';
@@ -42,7 +44,9 @@ class _DashboardState extends State<Dashboard> {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dashboard"),
+        title: Text(
+          "Dashboard",
+        ),
         actions: <Widget>[
           IconButton(
             onPressed: () {
@@ -74,7 +78,10 @@ class _DashboardState extends State<Dashboard> {
                     }
 
                     return CupertinoActionSheet(
-                      title: Text("Sign in"),
+                      title: Text(
+                        "Sign in",
+                        style: TextStyle(fontSize: 20),
+                      ),
                       message:
                           Text("Please select any method from options below"),
                       cancelButton: CupertinoActionSheetAction(
@@ -208,24 +215,37 @@ class _DashboardState extends State<Dashboard> {
                     margin: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
                     width: double.infinity,
-                    child: ListTile(
-                      enabled: false,
-                      title: GestureDetector(
-                          onTap: () => showSearch(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(30),
+                        onTap: () {
+                          showSearch(
                               context: context,
-                              delegate: SearchHospitalsDelegate()),
-                          child: Text("Search All Hospitals...")),
-                      trailing: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () => showSearch(
-                            context: context,
-                            delegate: SearchHospitalsDelegate()),
+                              delegate: SearchHospitalsDelegate());
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                "Search all hospitals...",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15,
+                                    letterSpacing: 2),
+                              ),
+                              Icon(Icons.search)
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
 
                   SizedBox(
-                    height: SizeConfig.blockSizeHorizontal * 10,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -236,17 +256,12 @@ class _DashboardState extends State<Dashboard> {
                             fontWeight: FontWeight.bold,
                             fontSize: SizeConfig.blockSizeHorizontal * 4),
                       ),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Citieslist())),
-                        child: Text(
-                          "See More",
-                          style: TextStyle(
-                              fontSize: SizeConfig.blockSizeHorizontal * 3.5),
-                        ),
-                      ),
+                      FlatButton(
+                          onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Citieslist())),
+                          child: Text("See more"))
                     ],
                   ),
                   SizedBox(
@@ -297,42 +312,56 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text(
-                "Hospital Finder",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: SizeConfig.safeBlockHorizontal * 5,
-                    letterSpacing: SizeConfig.safeBlockHorizontal * 0.8),
+      drawer: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor:
+              configBloc.darkOn ? Tools.hexToColor("#1f2124") : Colors.white,
+        ),
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text(
+                  "Kartik Chauhan",
+                  style: TextStyle(color: Colors.white),
+                ),
+                accountEmail: Text(
+                  "abc@gmail.com",
+                  style: TextStyle(color: Colors.white),
+                ),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.grey[300],
+                  child: Icon(FontAwesomeIcons.user),
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Colors.purple[600], Colors.purple[200]],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight),
+                ),
               ),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.purple[600], Colors.purple[200]],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
+              ListTile(
+                title: Text("Day Mode"),
+                trailing: DayNightSwitch(
+                  height: 40,
+                  width: 60,
+                  value: configBloc.darkOn,
+                  onSelection: (newValue) {
+                    setState(() {
+                      configBloc.reverseDarkMode();
+                    });
+                  },
+                ),
               ),
-            ),
-            ListTile(
-              title: Text("Dark Mode"),
-              trailing: CupertinoSwitch(
-                value: configBloc.darkOn,
-                onChanged: (value) {
-                  configBloc.reverseDarkMode();
-                },
-                activeColor: Colors.purple,
+              ListTile(
+                leading: Icon(Icons.reply),
+                title: Text("Exit"),
+                onTap: () =>
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.reply),
-              title: Text("Exit"),
-              onTap: () =>
-                  SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

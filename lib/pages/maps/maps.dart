@@ -9,6 +9,7 @@ import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadData.dart';
 import 'package:hospital_finder/utils/navigation.dart';
+import 'package:hospital_finder/utils/tools.dart';
 import 'package:provider/provider.dart';
 
 class HospitalListMap extends StatefulWidget {
@@ -68,7 +69,8 @@ class _HospitalListMapState extends State<HospitalListMap> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: _configBloc.darkOn ? Colors.black : Colors.white,
+            color:
+                _configBloc.darkOn ? Tools.hexToColor("#1f2124") : Colors.white,
             borderRadius: BorderRadius.circular(20),
             boxShadow: <BoxShadow>[
               BoxShadow(
