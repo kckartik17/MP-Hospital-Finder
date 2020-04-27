@@ -8,6 +8,7 @@ class LocationBloc with ChangeNotifier {
   String location = "Unknown Location";
   double latitude = 28.9885;
   double longitude = 76.9960;
+  String district;
 
   LocationBloc() {
     getLocation();
@@ -26,7 +27,7 @@ class LocationBloc with ChangeNotifier {
             location = addresses.first.addressLine;
             latitude = userLocation.latitude;
             longitude = userLocation.longitude;
-
+            district = addresses.first.locality;
             notifyListeners();
           } on Exception catch (e) {
             print('Could not get location: ${e.toString()}');

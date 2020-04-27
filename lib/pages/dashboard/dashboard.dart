@@ -1,10 +1,11 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
@@ -19,12 +20,16 @@ import 'package:hospital_finder/models/hospitalfirestore.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/painting.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Dashboard extends StatefulWidget {
   static const String routeName = "/dashboard";
   @override
   _DashboardState createState() => _DashboardState();
 }
+
+GoogleSignIn _googleSignIn = GoogleSignIn();
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class _DashboardState extends State<Dashboard> {
   double calculateDistance(lat1, lon1, lat2, lon2) {
@@ -36,7 +41,60 @@ class _DashboardState extends State<Dashboard> {
     return 12742 * asin(sqrt(a));
   }
 
-  bool signin = false;
+  GoogleSignInAccount _currentUser;
+  FirebaseUser firebaseUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount account) async {
+      setState(() {
+        _currentUser = account;
+      });
+    });
+
+    _googleSignIn.signInSilently(suppressErrors: false).then((account) {
+      _signIn(account);
+    }).catchError((dynamic onError) {
+      print(onError.toString());
+    });
+  }
+
+  Future<void> _signIn(GoogleSignInAccount googleUser) async {
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final FirebaseUser user =
+        (await _auth.signInWithCredential(credential)).user;
+
+    setState(() {
+      firebaseUser = user;
+    });
+  }
+
+  Future<void> _handleSignIn() async {
+    try {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      _signIn(googleUser);
+    } catch (error) {
+      print("Cancelled");
+    }
+  }
+
+  Future<void> _handleSignOut() async {
+    await _auth.signOut();
+    _googleSignIn.disconnect();
+    setState(() {
+      firebaseUser = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     LocationBloc locationBloc = Provider.of<LocationBloc>(context);
@@ -54,22 +112,23 @@ class _DashboardState extends State<Dashboard> {
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   context: context,
                   builder: (context) {
-                    if (signin) {
+                    if (_currentUser != null) {
                       return CupertinoActionSheet(
                         cancelButton: CupertinoActionSheetAction(
                           child: Text("Cancel",
                               style: TextStyle(color: Colors.blue)),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
-                        title: Text("Sign Out"),
+                        title: Text(
+                          "Sign Out",
+                          style: TextStyle(fontSize: 20),
+                        ),
                         message: Text("Do you want to sign out ?"),
                         actions: <Widget>[
                           CupertinoActionSheetAction(
                             child: Text("Sign Out"),
                             onPressed: () {
-                              setState(() {
-                                signin = !signin;
-                              });
+                              _handleSignOut();
                               Navigator.of(context).pop();
                             },
                           ),
@@ -93,9 +152,7 @@ class _DashboardState extends State<Dashboard> {
                         CupertinoActionSheetAction(
                           child: Text("Google"),
                           onPressed: () {
-                            setState(() {
-                              signin = !signin;
-                            });
+                            _handleSignIn();
                             Navigator.of(context).pop();
                           },
                         ),
@@ -112,7 +169,12 @@ class _DashboardState extends State<Dashboard> {
                     );
                   });
             },
-            icon: Icon(FontAwesomeIcons.user),
+            icon: _currentUser == null
+                ? Icon(FontAwesomeIcons.user)
+                : CircleAvatar(
+                    radius: 15,
+                    backgroundImage: NetworkImage("${_currentUser.photoUrl}"),
+                  ),
           )
         ],
       ),
@@ -159,44 +221,6 @@ class _DashboardState extends State<Dashboard> {
                       )
                     ],
                   ),
-                  // SizedBox(
-                  //   height: SizeConfig.blockSizeVertical * 2,
-                  // ),
-                  // Text(
-                  //   "What are you looking for ?",
-                  //   style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: SizeConfig.blockSizeHorizontal * 3.8),
-                  // ),
-                  // SizedBox(
-                  //   height: SizeConfig.blockSizeVertical * 2,
-                  // ),
-                  // Center(
-                  //   child: Wrap(
-                  //     runSpacing: SizeConfig.blockSizeVertical * 2,
-                  //     spacing: SizeConfig.blockSizeHorizontal * 5,
-                  //     children: <Widget>[
-                  //       SearchCard(
-                  //         text: "Search Hospitals",
-                  //         onTap: () {
-                  //           showSearch(
-                  //               context: context,
-                  //               delegate: SearchHospitalsDelegate());
-                  //         },
-                  //         color: Colors.red,
-                  //       ),
-                  //       SearchCard(
-                  //         text: "Search Blood Banks",
-                  //         onTap: () {},
-                  //         color: Colors.teal,
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: SizeConfig.blockSizeVertical * 5,
-                  // ),
-
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
@@ -243,7 +267,6 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 10,
                   ),
@@ -279,7 +302,9 @@ class _DashboardState extends State<Dashboard> {
                   bottom: SizeConfig.blockSizeHorizontal * 3,
                 ),
                 child: FutureBuilder(
-                  future: load("Sonipat"),
+                  future: load(locationBloc.district != null
+                      ? "${locationBloc.district}"
+                      : "Sonipat"),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.isEmpty) {
                       return Center(child: CircularProgressIndicator());
@@ -323,17 +348,25 @@ class _DashboardState extends State<Dashboard> {
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountName: Text(
-                  "Kartik Chauhan",
+                  _currentUser == null
+                      ? "Guest user"
+                      : _currentUser.displayName,
                   style: TextStyle(color: Colors.white),
                 ),
-                accountEmail: Text(
-                  "abc@gmail.com",
-                  style: TextStyle(color: Colors.white),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.grey[300],
-                  child: Icon(FontAwesomeIcons.user),
-                ),
+                accountEmail: _currentUser != null
+                    ? Text(
+                        _currentUser.email,
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : null,
+                currentAccountPicture: _currentUser == null
+                    ? CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                        child: Icon(FontAwesomeIcons.user),
+                      )
+                    : CircleAvatar(
+                        backgroundImage: NetworkImage(_currentUser.photoUrl),
+                      ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                       colors: [Colors.purple[600], Colors.purple[200]],
