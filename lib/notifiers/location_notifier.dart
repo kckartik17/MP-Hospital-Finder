@@ -24,7 +24,8 @@ class LocationBloc with ChangeNotifier {
                 new Coordinates(userLocation.latitude, userLocation.longitude);
             var addresses =
                 await Geocoder.local.findAddressesFromCoordinates(coordinates);
-            location = addresses.first.addressLine;
+            location =
+                "${addresses.first.locality}, ${addresses.first.adminArea}";
             latitude = userLocation.latitude;
             longitude = userLocation.longitude;
             district = addresses.first.locality;

@@ -5,7 +5,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hospital_finder/clippers/dashboardClipper.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
@@ -107,216 +109,285 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
     LocationBloc locationBloc = Provider.of<LocationBloc>(context);
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     SizeConfig().init(context);
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Dashboard",
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              _currentUser != null
-                  ? showCupertinoModalPopup(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      context: context,
-                      builder: (context) {
-                        return CupertinoActionSheet(
-                          cancelButton: CupertinoActionSheetAction(
-                            child: Text("Cancel",
-                                style: TextStyle(color: Colors.blue)),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                          title: Text(
-                            "Sign Out",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          message: Text("Do you want to sign out ?"),
-                          actions: <Widget>[
-                            CupertinoActionSheetAction(
-                              child: Text(
-                                "Sign Out",
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              onPressed: () {
-                                _handleSignOut();
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      })
-                  : _handleSignIn();
-            },
-            icon: _currentUser == null
-                ? Icon(FontAwesomeIcons.user)
-                : CircleAvatar(
-                    radius: 15,
-                    backgroundImage: NetworkImage("${_currentUser.photoUrl}"),
+      key: _scaffoldKey,
+      body: Column(
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              ClipPath(
+                clipper: DashboardClipper(),
+                child: Container(
+                  height: 330,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: configBloc.darkOn ? Color(0xff1f2124) : null,
+                    gradient: !configBloc.darkOn
+                        ? LinearGradient(
+                            colors: [Color(0xFF3750B2), Colors.blue[200]],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight)
+                        : null,
                   ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.blockSizeHorizontal * 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SafeArea(
+                      child: Opacity(
+                          opacity: 0.4,
+                          child: Image.asset("assets/images/doctor_icon.png")),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 280,
+                right: 8,
+                child: IconButton(
+                  onPressed: () {
+                    _currentUser != null
+                        ? showCupertinoModalPopup(
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                            context: context,
+                            builder: (context) {
+                              return CupertinoActionSheet(
+                                cancelButton: CupertinoActionSheetAction(
+                                  child: Text("Cancel",
+                                      style: TextStyle(color: Colors.blue)),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                title: Text(
+                                  "Sign Out",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                message: Text("Do you want to sign out ?"),
+                                actions: <Widget>[
+                                  CupertinoActionSheetAction(
+                                    child: Text(
+                                      "Sign Out",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onPressed: () {
+                                      _handleSignOut();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            })
+                        : _handleSignIn();
+                  },
+                  icon: _currentUser == null
+                      ? Icon(
+                          FontAwesomeIcons.user,
+                          color: Color(0xff73a1b2),
+                        )
+                      : CircleAvatar(
+                          radius: 15,
+                          backgroundImage:
+                              NetworkImage("${_currentUser.photoUrl}"),
+                        ),
+                ),
+              ),
+              SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.blockSizeHorizontal * 5,
+                      vertical: 8),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Icon(
-                        Icons.my_location,
-                        size: SizeConfig.safeBlockHorizontal * 4,
+                      GestureDetector(
+                        onTap: () => _scaffoldKey.currentState.openDrawer(),
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(shape: BoxShape.circle),
+                          child: SvgPicture.asset("assets/images/menu.svg"),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(
+                            Icons.my_location,
+                            color: Colors.white,
+                            size: SizeConfig.safeBlockHorizontal * 4,
+                          ),
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 2,
+                          ),
+                          InkWell(
+                            onTap: () => Fluttertoast.showToast(
+                                msg: locationBloc.location,
+                                gravity: ToastGravity.BOTTOM,
+                                toastLength: Toast.LENGTH_LONG),
+                            child: Text(
+                              locationBloc.location,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: SizeConfig.safeBlockHorizontal * 4,
+                            ),
+                            onPressed: () {
+                              locationBloc.getLocation();
+                              setState(() {});
+                            },
+                          )
+                        ],
                       ),
                       SizedBox(
-                        width: SizeConfig.blockSizeHorizontal * 2,
+                        height: 5,
                       ),
-                      InkWell(
-                        onTap: () => Fluttertoast.showToast(
-                            msg: locationBloc.location,
-                            gravity: ToastGravity.BOTTOM,
-                            toastLength: Toast.LENGTH_LONG),
-                        child: locationBloc.location.length > 40
-                            ? Text(locationBloc.location
-                                    .toString()
-                                    .substring(0, 40) +
-                                " ....")
-                            : Text(locationBloc.location),
+                      Text(
+                        _currentUser == null ? "Welcome" : "Welcome,",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 35,
+                            letterSpacing: 1),
                       ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          size: SizeConfig.safeBlockHorizontal * 4,
+                      _currentUser != null
+                          ? Text(
+                              "${_currentUser.displayName}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontStyle: FontStyle.italic,
+                                  letterSpacing: 1),
+                            )
+                          : Text(""),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: configBloc.darkOn
+                              ? Colors.black.withOpacity(0.4)
+                              : Colors.white30,
                         ),
-                        onPressed: () {
-                          locationBloc.getLocation();
-                          setState(() {});
-                        },
+                        margin: EdgeInsets.zero,
+                        padding: EdgeInsets.zero,
+                        width: size.width * 0.68,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(30),
+                            onTap: () {
+                              showSearch(
+                                  context: context,
+                                  delegate: SearchHospitalsDelegate());
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(15),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    "Search all hospitals...",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        letterSpacing: 2),
+                                  ),
+                                  Icon(Icons.search)
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       )
                     ],
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: configBloc.darkOn
-                            ? Tools.hexToColor("#1f2124")
-                            : Colors.white,
-                        boxShadow: !configBloc.darkOn
-                            ? [
-                                BoxShadow(
-                                    offset: Offset(0, 17),
-                                    blurRadius: 17,
-                                    color: Color(0xFFE6E6E6),
-                                    spreadRadius: 0)
-                              ]
-                            : null),
-                    margin: EdgeInsets.zero,
-                    padding: EdgeInsets.zero,
-                    width: double.infinity,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(30),
-                        onTap: () {
-                          showSearch(
-                              context: context,
-                              delegate: SearchHospitalsDelegate());
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Search all hospitals...",
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 15,
-                                    letterSpacing: 2),
-                              ),
-                              Icon(Icons.search)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+              child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.blockSizeHorizontal * 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        "Best Hospitals nearby you",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: SizeConfig.blockSizeHorizontal * 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            "Best Hospitals nearby you",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.blockSizeHorizontal * 4),
+                          ),
+                          FlatButton(
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Citieslist())),
+                              child: Text("See more"))
+                        ],
                       ),
-                      FlatButton(
-                          onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Citieslist())),
-                          child: Text("See more"))
                     ],
                   ),
-                  SizedBox(
-                    height: SizeConfig.blockSizeVertical * 2,
+                ),
+                Container(
+                  height: SizeConfig.blockSizeHorizontal * 65,
+                  padding: EdgeInsets.only(
+                    left: SizeConfig.blockSizeHorizontal * 2,
+                    right: SizeConfig.blockSizeHorizontal * 2,
+                    bottom: SizeConfig.blockSizeHorizontal * 3,
                   ),
-                ],
-              ),
+                  child: FutureBuilder(
+                    future: load(locationBloc.district != null
+                        ? "${locationBloc.district}"
+                        : "Sonipat"),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data.isEmpty) {
+                        return Center(child: CircularProgressIndicator());
+                      } else {
+                        List<HospitalFirestore> hospitals = snapshot.data;
+                        hospitals.forEach((h) {
+                          double dis = calculateDistance(
+                              locationBloc.latitude,
+                              locationBloc.longitude,
+                              double.parse(h.latitude),
+                              double.parse(h.longitude));
+                          h.distance = double.parse(dis.toStringAsPrecision(3));
+                        });
+                        hospitals
+                            .sort((a, b) => a.distance.compareTo(b.distance));
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, i) {
+                            return HospitalCard(
+                              hospital: hospitals[i],
+                            );
+                          },
+                          itemCount: snapshot.data.length,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
-            SafeArea(
-              child: Container(
-                height: SizeConfig.blockSizeHorizontal * 65,
-                padding: EdgeInsets.only(
-                  left: SizeConfig.blockSizeHorizontal * 2,
-                  right: SizeConfig.blockSizeHorizontal * 2,
-                  bottom: SizeConfig.blockSizeHorizontal * 3,
-                ),
-                child: FutureBuilder(
-                  future: load(locationBloc.district != null
-                      ? "${locationBloc.district}"
-                      : "Sonipat"),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData || snapshot.data.isEmpty) {
-                      return Center(child: CircularProgressIndicator());
-                    } else {
-                      List<HospitalFirestore> hospitals = snapshot.data;
-                      hospitals.forEach((h) {
-                        double dis = calculateDistance(
-                            locationBloc.latitude,
-                            locationBloc.longitude,
-                            double.parse(h.latitude),
-                            double.parse(h.longitude));
-                        h.distance = double.parse(dis.toStringAsPrecision(3));
-                      });
-                      hospitals
-                          .sort((a, b) => a.distance.compareTo(b.distance));
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, i) {
-                          return HospitalCard(
-                            hospital: hospitals[i],
-                          );
-                        },
-                        itemCount: snapshot.data.length,
-                      );
-                    }
-                  },
-                ),
-              ),
-            )
-          ],
-        ),
+          ))
+        ],
       ),
       drawer: Theme(
         data: Theme.of(context).copyWith(
@@ -381,3 +452,17 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
+
+// AppBar
+
+// AppBar(
+//         title: Text(
+//           "Dashboard",
+//         ),
+//         actions: <Widget>[
+//
+//         ],
+//       )
+
+//Location
+//
