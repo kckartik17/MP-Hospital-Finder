@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/hospitalfirestore.dart';
 import 'package:hospital_finder/notifiers/index.dart';
+import 'package:hospital_finder/pages/description_page/Description.dart';
 import 'package:hospital_finder/pages/maps/maps.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' show cos, sqrt, asin;
@@ -73,8 +74,9 @@ class _HospitalListState extends State<HospitalList> {
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(color: Colors.white),
         curve: Curves.bounceIn,
-        backgroundColor: configBloc.darkOn ? Colors.white : Colors.blue,
+        backgroundColor: configBloc.darkOn ? Colors.black : Color(0xFF3750B2),
         elevation: 8.0,
         shape: CircleBorder(),
         children: [
@@ -118,12 +120,57 @@ class _HospitalListState extends State<HospitalList> {
             }
             return ListView.builder(
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text("${list[index].name}"),
-                  subtitle: Text("${list[index].address}"),
-                  trailing: sortbutton == true
-                      ? Text("${list[index].distance} kms")
-                      : null,
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: configBloc.darkOn
+                            ? Color(0xFF1f2124)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: configBloc.darkOn
+                            ? null
+                            : [
+                                BoxShadow(
+                                    color: Color(0xFFE6E6E6),
+                                    offset: Offset(0, 17),
+                                    blurRadius: 17,
+                                    spreadRadius: 0),
+                              ]),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Description(
+                              hospital: list[index],
+                            ),
+                          ),
+                        ),
+                        child: ListTile(
+                          leading: Hero(
+                            tag: "${list[index].name}",
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("assets/images/hospital.jpg"),
+                            ),
+                          ),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                          title: Text("${list[index].name}"),
+                          subtitle: Text(
+                            "${list[index].address}",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          trailing: sortbutton == true
+                              ? Text("${list[index].distance} kms")
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ),
                 );
               },
               itemCount: list.length,

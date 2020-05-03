@@ -27,9 +27,10 @@ void main() {
         )
       ],
       child: AnimatedContainer(
-          duration: Duration(milliseconds: 500),
-          curve: Curves.bounceIn,
-          child: ConfigPage()),
+        duration: Duration(milliseconds: 500),
+        curve: Curves.bounceIn,
+        child: ConfigPage(),
+      ),
     ),
   );
 }

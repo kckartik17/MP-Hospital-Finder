@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:hospital_finder/notifiers/config_notifier.dart';
@@ -12,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'dart:math';
 import 'package:hospital_finder/models/hospitalfirestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Description extends StatefulWidget {
   final HospitalFirestore hospital;
@@ -22,13 +26,63 @@ class Description extends StatefulWidget {
 }
 
 class _DescriptionState extends State<Description> {
+  Random random = Random();
   TextEditingController reviewController;
   FocusNode focusNode;
+  double myrating = 0;
+  double avgrating = 0;
+  SharedPreferences prefs;
+  String id;
+
+  Future<void> getID() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      id = prefs.getString('id') ?? "";
+    });
+    print(" ID : ${prefs.getString('id')}");
+  }
+
+  Future<void> getRating() async {
+    int rating = (await FirebaseDatabase.instance
+            .reference()
+            .child("Hospitals/${widget.hospital.index}/$id/rating")
+            .once())
+        .value;
+    if (rating != null) {
+      setState(() {
+        myrating = rating.toDouble();
+      });
+    }
+    print("Rating : $myrating");
+  }
+
+  Future<void> getReview() async {
+    String review = (await FirebaseDatabase.instance
+            .reference()
+            .child("Hospitals/${widget.hospital.index}/$id/review")
+            .once())
+        .value;
+    if (review != null) {
+      reviewController = TextEditingController(text: review);
+    } else {
+      reviewController = TextEditingController();
+    }
+
+    print("Review : $review");
+  }
+
   @override
   void initState() {
     super.initState();
-    reviewController = TextEditingController();
+    getID();
+
     focusNode = FocusNode();
+    avgrating = random.nextDouble() * (5.0 - 1.0) + 1.0;
+    avgrating = double.parse(avgrating.toStringAsPrecision(2));
+    Future.delayed(Duration(milliseconds: 500), () {
+      getReview();
+      getRating();
+    });
   }
 
   @override
@@ -44,9 +98,7 @@ class _DescriptionState extends State<Description> {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: true);
     final screenWidth = MediaQuery.of(context).size.width;
-    Random random = Random();
-    double rating = random.nextDouble() * (5.0 - 1.0) + 1.0;
-    rating = double.parse(rating.toStringAsPrecision(2));
+
     List<Marker> markers = [];
     markers.add(
       Marker(
@@ -109,10 +161,10 @@ class _DescriptionState extends State<Description> {
                                       horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
                                       color: (() {
-                                        if (rating < 2.0) {
+                                        if (avgrating < 2.0) {
                                           return Colors.red[500];
-                                        } else if (rating >= 2.0 &&
-                                            rating < 3.6) {
+                                        } else if (avgrating >= 2.0 &&
+                                            avgrating < 3.6) {
                                           return Colors.yellow[800];
                                         } else {
                                           return Colors.green[500];
@@ -123,7 +175,7 @@ class _DescriptionState extends State<Description> {
                                   child: Column(
                                     children: <Widget>[
                                       Text(
-                                        "$rating",
+                                        "$avgrating",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(35,
@@ -281,7 +333,26 @@ class _DescriptionState extends State<Description> {
                               alignment: Alignment.center,
                               child: FlatButton(
                                   onPressed: () {
-                                    reviewController.clear();
+                                    String review =
+                                        reviewController.text.toString().trim();
+                                    if (review != "" && id != "") {
+                                      FirebaseDatabase.instance
+                                          .reference()
+                                          .child("Hospitals")
+                                          .child("${hospital.index}")
+                                          .child("$id")
+                                          .update({"review": review});
+                                      Fluttertoast.showToast(
+                                          msg: "Review submitted",
+                                          gravity: ToastGravity.BOTTOM,
+                                          toastLength: Toast.LENGTH_LONG);
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              "Review field can't be blank or Please Login",
+                                          gravity: ToastGravity.BOTTOM,
+                                          toastLength: Toast.LENGTH_LONG);
+                                    }
                                     FocusScope.of(context)
                                         .requestFocus(new FocusNode());
                                   },
@@ -372,10 +443,10 @@ class _DescriptionState extends State<Description> {
                                           ),
                                           SizedBox(height: 15),
                                           RatingBar(
-                                              initialRating: 0,
+                                              initialRating: myrating,
                                               minRating: 0,
                                               direction: Axis.horizontal,
-                                              allowHalfRating: true,
+                                              allowHalfRating: false,
                                               itemCount: 5,
                                               itemPadding: EdgeInsets.symmetric(
                                                   horizontal: 4.0),
@@ -383,15 +454,33 @@ class _DescriptionState extends State<Description> {
                                                     Icons.star,
                                                     color: Colors.amber,
                                                   ),
-                                              onRatingUpdate: (rating) {
-                                                print(rating);
+                                              onRatingUpdate: (newRating) {
+                                                setState(() {
+                                                  myrating = newRating;
+                                                });
                                               }),
                                           SizedBox(
                                             height: 15,
                                           ),
                                           FlatButton(
                                             onPressed: () {
-                                              Navigator.pop(context);
+                                              if (id != "") {
+                                                FirebaseDatabase.instance
+                                                    .reference()
+                                                    .child("Hospitals")
+                                                    .child("${hospital.index}")
+                                                    .child("$id")
+                                                    .update(
+                                                        {"rating": myrating});
+                                                Navigator.pop(context);
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                    msg: "Please login !",
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG);
+                                              }
                                             },
                                             child: Text(
                                               "Submit",

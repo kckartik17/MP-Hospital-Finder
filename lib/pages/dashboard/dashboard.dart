@@ -21,6 +21,7 @@ import 'dart:math' show cos, sqrt, asin;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/painting.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboard extends StatefulWidget {
   static const String routeName = "/dashboard";
@@ -43,10 +44,16 @@ class _DashboardState extends State<Dashboard> {
 
   GoogleSignInAccount _currentUser;
   FirebaseUser firebaseUser;
+  SharedPreferences prefs;
+
+  Future<void> getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   void initState() {
     super.initState();
+    getPrefs();
     _googleSignIn.onCurrentUserChanged
         .listen((GoogleSignInAccount account) async {
       setState(() {
@@ -73,6 +80,8 @@ class _DashboardState extends State<Dashboard> {
     final FirebaseUser user =
         (await _auth.signInWithCredential(credential)).user;
 
+    prefs.setString('id', user.uid);
+
     setState(() {
       firebaseUser = user;
     });
@@ -90,6 +99,7 @@ class _DashboardState extends State<Dashboard> {
   Future<void> _handleSignOut() async {
     await _auth.signOut();
     _googleSignIn.disconnect();
+    prefs.remove('id');
     setState(() {
       firebaseUser = null;
     });
@@ -230,10 +240,10 @@ class _DashboardState extends State<Dashboard> {
                         boxShadow: !configBloc.darkOn
                             ? [
                                 BoxShadow(
-                                    offset: Offset(0, 10),
-                                    blurRadius: 10.0,
-                                    color: Colors.grey[400],
-                                    spreadRadius: 3)
+                                    offset: Offset(0, 17),
+                                    blurRadius: 17,
+                                    color: Color(0xFFE6E6E6),
+                                    spreadRadius: 0)
                               ]
                             : null),
                     margin: EdgeInsets.zero,
@@ -369,7 +379,7 @@ class _DashboardState extends State<Dashboard> {
                       ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [Colors.purple[600], Colors.purple[200]],
+                      colors: [Color(0xFF3750B2), Colors.blue[200]],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight),
                 ),

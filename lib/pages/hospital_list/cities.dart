@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_finder/models/district.dart';
+import 'package:hospital_finder/notifiers/config_notifier.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/searchHospitals.dart';
+import 'package:provider/provider.dart';
 
 class Citieslist extends StatefulWidget {
   @override
@@ -21,6 +23,7 @@ class _CitieslistState extends State<Citieslist> {
 
   @override
   Widget build(BuildContext context) {
+    ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Cities"),
@@ -43,16 +46,53 @@ class _CitieslistState extends State<Citieslist> {
               return ListView.builder(
                 itemCount: list.length,
                 itemBuilder: (context, i) {
-                  return ListTile(
-                    title: Text(list[i].name),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HospitalList(
-                                    district: list[i].name,
-                                  )));
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 8),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: configBloc.darkOn
+                              ? Color(0xFF1f2124)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: configBloc.darkOn
+                              ? null
+                              : [
+                                  BoxShadow(
+                                      color: Color(0xFFE6E6E6),
+                                      offset: Offset(0, 17),
+                                      blurRadius: 17,
+                                      spreadRadius: 0),
+                                ]),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HospitalList(
+                                  district: list[i].name,
+                                ),
+                              ),
+                            );
+                          },
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 8),
+                            leading: CircleAvatar(
+                              backgroundColor: configBloc.darkOn
+                                  ? Colors.black
+                                  : Colors.grey[100],
+                              child: Text(list[i].name.substring(0, 1)),
+                            ),
+                            title: Text(list[i].name),
+                            trailing: Icon(Icons.arrow_forward_ios),
+                          ),
+                        ),
+                      ),
+                    ),
                   );
                 },
               );
