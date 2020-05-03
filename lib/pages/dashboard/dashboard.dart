@@ -118,66 +118,37 @@ class _DashboardState extends State<Dashboard> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              showCupertinoModalPopup(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  context: context,
-                  builder: (context) {
-                    if (_currentUser != null) {
-                      return CupertinoActionSheet(
-                        cancelButton: CupertinoActionSheetAction(
-                          child: Text("Cancel",
-                              style: TextStyle(color: Colors.blue)),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        title: Text(
-                          "Sign Out",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        message: Text("Do you want to sign out ?"),
-                        actions: <Widget>[
-                          CupertinoActionSheetAction(
-                            child: Text("Sign Out"),
-                            onPressed: () {
-                              _handleSignOut();
-                              Navigator.of(context).pop();
-                            },
+              _currentUser != null
+                  ? showCupertinoModalPopup(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      context: context,
+                      builder: (context) {
+                        return CupertinoActionSheet(
+                          cancelButton: CupertinoActionSheetAction(
+                            child: Text("Cancel",
+                                style: TextStyle(color: Colors.blue)),
+                            onPressed: () => Navigator.of(context).pop(),
                           ),
-                        ],
-                      );
-                    }
-
-                    return CupertinoActionSheet(
-                      title: Text(
-                        "Sign in",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      message:
-                          Text("Please select any method from options below"),
-                      cancelButton: CupertinoActionSheetAction(
-                        child: Text("Cancel",
-                            style: TextStyle(color: Colors.blue)),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                      actions: <Widget>[
-                        CupertinoActionSheetAction(
-                          child: Text("Google"),
-                          onPressed: () {
-                            _handleSignIn();
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        CupertinoActionSheetAction(
-                          child: Text(
-                            "Phone",
-                            style: TextStyle(color: Colors.green),
+                          title: Text(
+                            "Sign Out",
+                            style: TextStyle(fontSize: 20),
                           ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  });
+                          message: Text("Do you want to sign out ?"),
+                          actions: <Widget>[
+                            CupertinoActionSheetAction(
+                              child: Text(
+                                "Sign Out",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () {
+                                _handleSignOut();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      })
+                  : _handleSignIn();
             },
             icon: _currentUser == null
                 ? Icon(FontAwesomeIcons.user)

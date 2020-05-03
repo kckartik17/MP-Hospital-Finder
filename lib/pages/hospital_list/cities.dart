@@ -26,7 +26,7 @@ class _CitieslistState extends State<Citieslist> {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cities"),
+        title: Text("Search by Districts"),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.search),

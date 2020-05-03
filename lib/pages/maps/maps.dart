@@ -72,13 +72,15 @@ class _HospitalListMapState extends State<HospitalListMap> {
             color:
                 _configBloc.darkOn ? Tools.hexToColor("#1f2124") : Colors.white,
             borderRadius: BorderRadius.circular(20),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10.0,
-                  offset: new Offset(0.0, 10.0),
-                  spreadRadius: 5),
-            ],
+            boxShadow: !_configBloc.darkOn
+                ? [
+                    BoxShadow(
+                        color: Color(0xFFE6E6E6),
+                        offset: Offset(0, 17),
+                        blurRadius: 17,
+                        spreadRadius: 0),
+                  ]
+                : null,
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(

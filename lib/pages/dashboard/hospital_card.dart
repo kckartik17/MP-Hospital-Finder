@@ -23,7 +23,7 @@ class HospitalCard extends StatelessWidget {
       padding:
           EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal * 2),
       child: InkWell(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(15),
         onTap: () {
           Navigator.push(
             context,
@@ -40,7 +40,7 @@ class HospitalCard extends StatelessWidget {
           decoration: BoxDecoration(
             color:
                 configBloc.darkOn ? Tools.hexToColor("#1f2124") : Colors.white,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(15),
             boxShadow: !configBloc.darkOn
                 ? [
                     BoxShadow(
@@ -64,8 +64,8 @@ class HospitalCard extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
                     ),
                     image: DecorationImage(
                         image: AssetImage("assets/images/hospital.jpg"),

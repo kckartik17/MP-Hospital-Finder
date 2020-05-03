@@ -126,14 +126,20 @@ class _DescriptionState extends State<Description> {
                     children: <Widget>[
                       Hero(
                         tag: "${hospital.name}",
-                        child: Container(
-                          height: ScreenUtil().setHeight(300),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage('assets/images/hospital.jpg'),
-                                fit: BoxFit.cover),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20)),
+                          child: Container(
+                            height: ScreenUtil().setHeight(300),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/hospital.jpg'),
+                                  fit: BoxFit.cover),
+                            ),
+                            width: screenWidth,
                           ),
-                          width: screenWidth,
                         ),
                       ),
                       Padding(
@@ -387,128 +393,141 @@ class _DescriptionState extends State<Description> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              GestureDetector(
-                                onTap: () {
-                                  call(hospital.mobile);
-                                },
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: Colors.white60,
-                                      child: Icon(
-                                        Icons.call,
-                                        color: configBloc.darkOn
-                                            ? Colors.black
-                                            : Colors.green,
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    call(hospital.mobile);
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor: Colors.white60,
+                                        child: Icon(
+                                          Icons.call,
+                                          color: configBloc.darkOn
+                                              ? Colors.black
+                                              : Colors.green,
+                                        ),
                                       ),
-                                    ),
-                                    Text("Call")
-                                  ],
+                                      Text("Call")
+                                    ],
+                                  ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () => navigate(
-                                    hospital.latitude, hospital.longitude),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: Colors.white60,
-                                      child: Icon(Icons.directions),
-                                    ),
-                                    Text("Get Directions")
-                                  ],
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () => navigate(
+                                      hospital.latitude, hospital.longitude),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor: Colors.white60,
+                                        child: Icon(Icons.directions),
+                                      ),
+                                      Text("Get Directions")
+                                    ],
+                                  ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  showCupertinoModalPopup(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 10, sigmaY: 10),
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20))),
-                                      title: Column(
-                                        children: <Widget>[
-                                          Text(
-                                            "Rate ${hospital.name}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
-                                          ),
-                                          SizedBox(height: 15),
-                                          RatingBar(
-                                              initialRating: myrating,
-                                              minRating: 0,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: false,
-                                              itemCount: 5,
-                                              itemPadding: EdgeInsets.symmetric(
-                                                  horizontal: 4.0),
-                                              itemBuilder: (context, _) => Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                              onRatingUpdate: (newRating) {
-                                                setState(() {
-                                                  myrating = newRating;
-                                                });
-                                              }),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          FlatButton(
-                                            onPressed: () {
-                                              if (id != "") {
-                                                FirebaseDatabase.instance
-                                                    .reference()
-                                                    .child("Hospitals")
-                                                    .child("${hospital.index}")
-                                                    .child("$id")
-                                                    .update(
-                                                        {"rating": myrating});
-                                                Navigator.pop(context);
-                                              } else {
-                                                Fluttertoast.showToast(
-                                                    msg: "Please login !",
-                                                    gravity:
-                                                        ToastGravity.BOTTOM,
-                                                    toastLength:
-                                                        Toast.LENGTH_LONG);
-                                              }
-                                            },
-                                            child: Text(
-                                              "Submit",
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    showCupertinoModalPopup(
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 10, sigmaY: 10),
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))),
+                                        title: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              "Rate ${hospital.name}",
                                               style: TextStyle(
-                                                  color: Colors.blueAccent,
-                                                  fontWeight: FontWeight.bold),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
                                             ),
-                                          ),
-                                        ],
+                                            SizedBox(height: 15),
+                                            RatingBar(
+                                                initialRating: myrating,
+                                                minRating: 0,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: false,
+                                                itemCount: 5,
+                                                itemPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 4.0),
+                                                itemBuilder: (context, _) =>
+                                                    Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                onRatingUpdate: (newRating) {
+                                                  setState(() {
+                                                    myrating = newRating;
+                                                  });
+                                                }),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            FlatButton(
+                                              onPressed: () {
+                                                if (id != "") {
+                                                  FirebaseDatabase.instance
+                                                      .reference()
+                                                      .child("Hospitals")
+                                                      .child(
+                                                          "${hospital.index}")
+                                                      .child("$id")
+                                                      .update(
+                                                          {"rating": myrating});
+                                                  Navigator.pop(context);
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg: "Please login !",
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      toastLength:
+                                                          Toast.LENGTH_LONG);
+                                                }
+                                              },
+                                              child: Text(
+                                                "Submit",
+                                                style: TextStyle(
+                                                    color: Colors.blueAccent,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: Colors.white60,
-                                      child: Icon(
-                                        Icons.star_half,
-                                        color: configBloc.darkOn
-                                            ? Colors.black
-                                            : Colors.blue,
+                                    );
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor: Colors.white60,
+                                        child: Icon(
+                                          Icons.star_half,
+                                          color: configBloc.darkOn
+                                              ? Colors.black
+                                              : Colors.blue,
+                                        ),
                                       ),
-                                    ),
-                                    Text("Add review")
-                                  ],
+                                      Text("Add review")
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

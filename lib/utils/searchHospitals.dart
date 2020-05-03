@@ -5,16 +5,21 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/district.dart';
 import 'package:hospital_finder/models/index.dart';
+import 'package:hospital_finder/notifiers/config_notifier.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadData.dart';
 import 'package:hospital_finder/utils/navigation.dart';
 import 'package:hospital_finder/models/hospitalfirestore.dart';
+import 'package:provider/provider.dart';
 
 class SearchHospitalsDelegate extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
-    return Theme.of(context);
+    ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
+    return Theme.of(context).copyWith(
+      primaryColor: configBloc.darkOn ? Colors.black : Color(0xFFF8F8F8),
+    );
   }
 
   @override
@@ -88,9 +93,8 @@ class SearchHospitalsDelegate extends SearchDelegate {
                         filteredList[i].latitude, filteredList[i].longitude),
                   ),
                 ],
-                child: Container(
-                  // color:
-                  //     configBloc.darkOn ? Colors.black : Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: ListTile(
                     onTap: () {},
                     contentPadding: EdgeInsets.symmetric(horizontal: 2.0),
@@ -108,15 +112,13 @@ class SearchHospitalsDelegate extends SearchDelegate {
                           ]),
                     ),
                     leading: CircleAvatar(
-                      backgroundImage:
-                          AssetImage("assets/images/background.jpg"),
+                      backgroundImage: AssetImage("assets/images/hospital.jpg"),
                     ),
                     subtitle: AutoSizeText(
                       "${filteredList[i].district}, ${filteredList[i].state}",
                       style: TextStyle(
                           fontSize: SizeConfig.safeBlockHorizontal * 3),
                     ),
-                    trailing: AutoSizeText("${filteredList[i].index} km"),
                   ),
                 ),
               );
@@ -131,7 +133,10 @@ class SearchHospitalsDelegate extends SearchDelegate {
 class CitiesDelegate extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
-    return Theme.of(context);
+    ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
+    return Theme.of(context).copyWith(
+      primaryColor: configBloc.darkOn ? Colors.black : Color(0xFFF8F8F8),
+    );
   }
 
   @override
@@ -246,7 +251,10 @@ class HospitalsDelegate extends SearchDelegate {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    return Theme.of(context);
+    ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
+    return Theme.of(context).copyWith(
+      primaryColor: configBloc.darkOn ? Colors.black : Color(0xFFF8F8F8),
+    );
   }
 
   @override
