@@ -336,7 +336,7 @@ class _DashboardState extends State<Dashboard> {
                                           fontSize: 15,
                                           letterSpacing: 2),
                                     ),
-                                    Icon(Icons.search)
+                                    Icon(Icons.search, color: Colors.white)
                                   ],
                                 ),
                               ),
