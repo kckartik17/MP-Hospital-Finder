@@ -20,6 +20,8 @@ class _GetStartedState extends State<GetStarted> {
   GoogleSignInAccount _currentUser;
   FirebaseUser firebaseUser;
 
+  SharedPreferences prefs;
+
   @override
   void initState() {
     super.initState();
@@ -128,8 +130,11 @@ class _GetStartedState extends State<GetStarted> {
                       child: Column(
                         children: <Widget>[
                           GoogleSignInButton(
-                            onPressed: () {
-                              _handleSignIn().whenComplete(() {
+                            onPressed: () async {
+                              _handleSignIn().whenComplete(() async {
+                                prefs = await SharedPreferences.getInstance();
+                                await prefs.setBool('seen', true);
+
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -149,7 +154,10 @@ class _GetStartedState extends State<GetStarted> {
                             height: 5,
                           ),
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              prefs = await SharedPreferences.getInstance();
+                              await prefs.setBool('seen', true);
+
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

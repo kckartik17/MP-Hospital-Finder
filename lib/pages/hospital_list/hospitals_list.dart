@@ -97,11 +97,13 @@ class _HospitalListState extends State<HospitalList> {
             labelStyle: TextStyle(color: Colors.black),
             label: 'View in Maps',
             onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HospitalListMap(
-                          district: widget.district,
-                        ))),
+              context,
+              MaterialPageRoute(
+                builder: (context) => HospitalListMap(
+                  district: widget.district,
+                ),
+              ),
+            ),
           )
         ],
       ),

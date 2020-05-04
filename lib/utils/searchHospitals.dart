@@ -6,6 +6,7 @@ import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/district.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/config_notifier.dart';
+import 'package:hospital_finder/pages/description_page/Description.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/utils/call.dart';
 import 'package:hospital_finder/utils/loadData.dart';
@@ -182,11 +183,13 @@ class CitiesDelegate extends SearchDelegate {
                             title: Text(district.name),
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HospitalList(
-                                            district: district.name,
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HospitalList(
+                                    district: district.name,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                         ))
@@ -217,11 +220,13 @@ class CitiesDelegate extends SearchDelegate {
                             onTap: () {
                               query = district.name;
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HospitalList(
-                                            district: district.name,
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HospitalList(
+                                    district: district.name,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                         ))
@@ -298,7 +303,14 @@ class HospitalsDelegate extends SearchDelegate {
                 .map<ListTile>((hospital) => ListTile(
                       title: Text(hospital.name),
                       onTap: () {
-                        query = hospital.name;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => Description(
+                              hospital: hospital,
+                            ),
+                          ),
+                        );
                       },
                     ))
                 .toList(),
@@ -328,6 +340,14 @@ class HospitalsDelegate extends SearchDelegate {
                       title: Text(hospital.name),
                       onTap: () {
                         query = hospital.name;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => Description(
+                              hospital: hospital,
+                            ),
+                          ),
+                        );
                       },
                     ))
                 .toList(),

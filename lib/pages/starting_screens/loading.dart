@@ -19,7 +19,6 @@ class _LoadingState extends State<Loading> {
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => Dashboard()));
     } else {
-      await prefs.setBool('seen', true);
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => GetStarted()));
     }

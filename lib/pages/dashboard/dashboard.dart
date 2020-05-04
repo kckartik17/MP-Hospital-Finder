@@ -487,17 +487,3 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
-
-// AppBar
-
-// AppBar(
-//         title: Text(
-//           "Dashboard",
-//         ),
-//         actions: <Widget>[
-//
-//         ],
-//       )
-
-//Location
-//
