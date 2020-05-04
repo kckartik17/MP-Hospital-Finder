@@ -430,7 +430,9 @@ class _DescriptionState extends State<Description> {
                                         backgroundColor: Colors.white60,
                                         child: Icon(
                                           Icons.directions,
-                                          color: Colors.red,
+                                          color: !configBloc.darkOn
+                                              ? Colors.red
+                                              : Colors.black,
                                         ),
                                       ),
                                       Text("Get Directions")
