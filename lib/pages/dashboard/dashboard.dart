@@ -13,6 +13,7 @@ import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
 import 'package:hospital_finder/notifiers/index.dart';
 import 'package:hospital_finder/pages/dashboard/hospital_card.dart';
+import 'package:hospital_finder/pages/doctors/doctors_list.dart';
 import 'package:hospital_finder/pages/hospital_list/cities.dart';
 import 'package:hospital_finder/utils/day_night_switch.dart';
 import 'package:hospital_finder/utils/loadData.dart';
@@ -576,7 +577,8 @@ class SpecialitiesCard extends StatelessWidget {
       ),
       child: InkWell(
           borderRadius: BorderRadius.circular(15),
-          onTap: () {},
+          onTap: () => Navigator.push(
+              context, MaterialPageRoute(builder: (_) => DoctorsList())),
           child: Ink(
             width: SizeConfig.blockSizeHorizontal * 40,
             decoration: BoxDecoration(
