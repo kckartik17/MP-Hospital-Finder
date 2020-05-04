@@ -428,7 +428,10 @@ class _DescriptionState extends State<Description> {
                                     children: <Widget>[
                                       CircleAvatar(
                                         backgroundColor: Colors.white60,
-                                        child: Icon(Icons.directions),
+                                        child: Icon(
+                                          Icons.directions,
+                                          color: Colors.red,
+                                        ),
                                       ),
                                       Text("Get Directions")
                                     ],
