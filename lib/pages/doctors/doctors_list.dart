@@ -15,58 +15,62 @@ class _DoctorsListState extends State<DoctorsList> {
   Widget build(BuildContext context) {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Doctors"),
-        ),
-        body: ListView(
-          children: <Widget>[
-            DoctorCard(
-              configBloc: configBloc,
-              name: "Dr. Ritesh",
-              address: "Vasant Kunj, Ritesh Dental Clinic",
-              isFemale: false,
-              rating: "99%",
-              feedback: "88",
-              fee: "500",
-            ),
-            DoctorCard(
-              configBloc: configBloc,
-              name: "Dr. Viraj Chopra",
-              address: "New Friends Colony, VC Smile By Design",
-              isFemale: true,
-              rating: "98%",
-              feedback: "21",
-              fee: "500",
-            ),
-            DoctorCard(
-              configBloc: configBloc,
-              name: "Dr. Prashant Nanda",
-              address: "Defence Colony, Nanda Dental Clinic",
-              isFemale: false,
-              rating: "98%",
-              feedback: "115",
-              fee: "500",
-            ),
-            DoctorCard(
-              configBloc: configBloc,
-              name: "Dr. Archana Bhardwaj",
-              address: "South Extension 1, Abhirachna Dental",
-              isFemale: true,
-              rating: "99%",
-              feedback: "71",
-              fee: "500",
-            ),
-            DoctorCard(
-              configBloc: configBloc,
-              name: "Dr. Manav Kalra",
-              address: "Defense Colony, Kalra Dental Clinic",
-              isFemale: false,
-              rating: "95%",
-              feedback: "94",
-              fee: "500",
-            )
-          ],
-        ));
+      appBar: AppBar(
+        title: Text("Doctors"),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.search), onPressed: () {})
+        ],
+      ),
+      body: ListView(
+        children: <Widget>[
+          DoctorCard(
+            configBloc: configBloc,
+            name: "Dr. Ritesh",
+            address: "Vasant Kunj, Ritesh Dental Clinic",
+            isFemale: false,
+            rating: "99%",
+            feedback: "88",
+            fee: "500",
+          ),
+          DoctorCard(
+            configBloc: configBloc,
+            name: "Dr. Viraj Chopra",
+            address: "New Friends Colony, VC Smile By Design",
+            isFemale: true,
+            rating: "98%",
+            feedback: "21",
+            fee: "500",
+          ),
+          DoctorCard(
+            configBloc: configBloc,
+            name: "Dr. Prashant Nanda",
+            address: "Defence Colony, Nanda Dental Clinic",
+            isFemale: false,
+            rating: "98%",
+            feedback: "115",
+            fee: "500",
+          ),
+          DoctorCard(
+            configBloc: configBloc,
+            name: "Dr. Archana Bhardwaj",
+            address: "South Extension 1, Abhirachna Dental",
+            isFemale: true,
+            rating: "99%",
+            feedback: "71",
+            fee: "500",
+          ),
+          DoctorCard(
+            configBloc: configBloc,
+            name: "Dr. Manav Kalra",
+            address: "Defense Colony, Kalra Dental Clinic",
+            isFemale: false,
+            rating: "95%",
+            feedback: "94",
+            fee: "500",
+          )
+        ],
+      ),
+    );
   }
 }
 
