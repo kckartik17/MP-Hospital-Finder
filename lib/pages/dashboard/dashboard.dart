@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hospital_finder/clippers/dashboardClipper.dart';
 import 'package:hospital_finder/config/size_config.dart';
 import 'package:hospital_finder/models/index.dart';
@@ -419,7 +420,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     SizedBox(height: 15),
                     Container(
-                      height: 180,
+                      height: 160,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
@@ -456,7 +457,34 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 50)
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Made with ",
+                          style: GoogleFonts.mcLaren(
+                            textStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.grey),
+                          ),
+                        ),
+                        Container(
+                          height: 20,
+                          width: 20,
+                          child: SvgPicture.asset("assets/images/heart.svg"),
+                        ),
+                        Text(
+                          " by Kartik & Kushal",
+                          style: GoogleFonts.mcLaren(
+                            textStyle: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
