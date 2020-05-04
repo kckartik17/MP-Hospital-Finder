@@ -20,8 +20,7 @@ class HospitalCard extends StatelessWidget {
     ConfigBloc configBloc = Provider.of<ConfigBloc>(context);
     SizeConfig().init(context);
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal * 2),
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
         onTap: () {

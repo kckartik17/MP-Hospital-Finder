@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -229,9 +230,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 SafeArea(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.blockSizeHorizontal * 5,
-                        vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,78 +348,119 @@ class _DashboardState extends State<Dashboard> {
               ],
             ),
             Expanded(
-                child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.blockSizeHorizontal * 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Best Hospitals nearby you",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: SizeConfig.blockSizeHorizontal * 4),
-                            ),
-                            FlatButton(
-                                onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Citieslist())),
-                                child: Text("See more"))
-                          ],
-                        ),
-                      ],
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            "Best Hospitals nearby you",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: SizeConfig.blockSizeHorizontal * 4),
+                          ),
+                          FlatButton(
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Citieslist())),
+                              child: Text("See more"))
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: SizeConfig.blockSizeHorizontal * 65,
-                    padding: EdgeInsets.only(
-                      left: SizeConfig.blockSizeHorizontal * 2,
-                      right: SizeConfig.blockSizeHorizontal * 2,
-                      bottom: SizeConfig.blockSizeHorizontal * 3,
+                    Container(
+                      height: 250,
+                      child: FutureBuilder(
+                        future: load(locationBloc.district != null
+                            ? "${locationBloc.district}"
+                            : "Sonipat"),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData || snapshot.data.isEmpty) {
+                            return Center(child: CircularProgressIndicator());
+                          } else {
+                            List<HospitalFirestore> hospitals = snapshot.data;
+                            hospitals.forEach((h) {
+                              double dis = calculateDistance(
+                                  locationBloc.latitude,
+                                  locationBloc.longitude,
+                                  double.parse(h.latitude),
+                                  double.parse(h.longitude));
+                              h.distance =
+                                  double.parse(dis.toStringAsPrecision(3));
+                            });
+                            hospitals.sort(
+                                (a, b) => a.distance.compareTo(b.distance));
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (BuildContext context, i) {
+                                return HospitalCard(
+                                  hospital: hospitals[i],
+                                );
+                              },
+                              itemCount: snapshot.data.length,
+                            );
+                          }
+                        },
+                      ),
                     ),
-                    child: FutureBuilder(
-                      future: load(locationBloc.district != null
-                          ? "${locationBloc.district}"
-                          : "Sonipat"),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData || snapshot.data.isEmpty) {
-                          return Center(child: CircularProgressIndicator());
-                        } else {
-                          List<HospitalFirestore> hospitals = snapshot.data;
-                          hospitals.forEach((h) {
-                            double dis = calculateDistance(
-                                locationBloc.latitude,
-                                locationBloc.longitude,
-                                double.parse(h.latitude),
-                                double.parse(h.longitude));
-                            h.distance =
-                                double.parse(dis.toStringAsPrecision(3));
-                          });
-                          hospitals
-                              .sort((a, b) => a.distance.compareTo(b.distance));
-                          return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (BuildContext context, i) {
-                              return HospitalCard(
-                                hospital: hospitals[i],
-                              );
-                            },
-                            itemCount: snapshot.data.length,
-                          );
-                        }
-                      },
+                    SizedBox(height: 15),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "Find doctors in top specialities",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: SizeConfig.blockSizeHorizontal * 4),
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 15),
+                    Container(
+                      height: 180,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: <Widget>[
+                          SpecialitiesCard(
+                            configBloc: configBloc,
+                            svgPath: "assets/images/dentist.svg",
+                            name: "Dentist",
+                          ),
+                          SpecialitiesCard(
+                            configBloc: configBloc,
+                            svgPath: "assets/images/gynae.svg",
+                            name: "Gynaecologist",
+                          ),
+                          SpecialitiesCard(
+                            configBloc: configBloc,
+                            svgPath: "assets/images/orthopedic.svg",
+                            name: "Orthopedist",
+                          ),
+                          SpecialitiesCard(
+                            configBloc: configBloc,
+                            svgPath: "assets/images/physio.svg",
+                            name: "Physiotherapist",
+                          ),
+                          SpecialitiesCard(
+                            configBloc: configBloc,
+                            svgPath: "assets/images/dermatology.svg",
+                            name: "Dermatologist",
+                          ),
+                          SpecialitiesCard(
+                            configBloc: configBloc,
+                            svgPath: "assets/images/pedia.svg",
+                            name: "Pediatrician",
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 50)
+                  ],
+                ),
               ),
-            ))
+            )
           ],
         ),
         drawer: Theme(
@@ -484,6 +524,73 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SpecialitiesCard extends StatelessWidget {
+  const SpecialitiesCard(
+      {Key key,
+      @required this.configBloc,
+      @required this.svgPath,
+      @required this.name})
+      : super(key: key);
+
+  final ConfigBloc configBloc;
+  final String svgPath;
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.0,
+      ),
+      child: InkWell(
+          borderRadius: BorderRadius.circular(15),
+          onTap: () {},
+          child: Ink(
+            width: SizeConfig.blockSizeHorizontal * 40,
+            decoration: BoxDecoration(
+              color: configBloc.darkOn
+                  ? Tools.hexToColor("#1f2124")
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: !configBloc.darkOn
+                  ? [
+                      BoxShadow(
+                        color: Color(0xFFE6E6E6),
+                        blurRadius: 17,
+                        offset: Offset(0, 17),
+                        spreadRadius: 0,
+                      )
+                    ]
+                  : null,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(10),
+                  height: 70,
+                  width: 70,
+                  decoration: BoxDecoration(
+                      color:
+                          configBloc.darkOn ? Colors.black : Colors.blue[200],
+                      shape: BoxShape.circle),
+                  child: SvgPicture.asset(svgPath),
+                ),
+                Divider(),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 18.0),
+                  child: AutoSizeText(
+                    name,
+                    maxLines: 2,
+                  ),
+                )
+              ],
+            ),
+          )),
     );
   }
 }

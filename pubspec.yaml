@@ -74,6 +74,7 @@ flutter:
     - assets/images/background.jpg
     - assets/images/hospital.jpg
     - assets/images/doctors_banner.png
+    - assets/images/
     - assets/images/maps.png
     - assets/images/menu.svg
     - assets/images/doctor_icon.png
