@@ -65,14 +65,6 @@ class _GetStartedState extends State<GetStarted> {
     }
   }
 
-  Future<void> _handleSignOut() async {
-    await _auth.signOut();
-    _googleSignIn.disconnect();
-    setState(() {
-      firebaseUser = null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

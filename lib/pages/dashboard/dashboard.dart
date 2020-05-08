@@ -375,7 +375,7 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                     Container(
-                      height: 250,
+                      height: SizeConfig.blockSizeHorizontal * 60,
                       child: FutureBuilder(
                         future: load(locationBloc.district != null
                             ? "${locationBloc.district}"

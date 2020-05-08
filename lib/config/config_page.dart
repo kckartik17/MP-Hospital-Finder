@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hospital_finder/pages/dashboard/dashboard.dart';
 import 'package:hospital_finder/pages/hospital_list/hospitals_list.dart';
 import 'package:hospital_finder/pages/maps/maps.dart';
-import 'package:hospital_finder/pages/starting_screens/get_started.dart';
 import 'package:hospital_finder/pages/starting_screens/loading.dart';
 import 'package:hospital_finder/utils/hf.dart';
 import 'package:provider/provider.dart';
 import 'package:hospital_finder/notifiers/index.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfigPage extends StatefulWidget {
   static const String routeName = "/";
