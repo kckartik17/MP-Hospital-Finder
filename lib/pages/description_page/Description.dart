@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:hospital_finder/notifiers/config_notifier.dart';
@@ -33,7 +34,7 @@ class _DescriptionState extends State<Description> {
   double avgrating = 0;
   SharedPreferences prefs;
   String id;
-
+  bool isReviewed = false;
   Future<void> getID() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -63,9 +64,15 @@ class _DescriptionState extends State<Description> {
             .once())
         .value;
     if (review != null) {
-      reviewController = TextEditingController(text: review);
+      setState(() {
+        reviewController = TextEditingController(text: review);
+        isReviewed = true;
+      });
     } else {
-      reviewController = TextEditingController();
+      setState(() {
+        reviewController = TextEditingController();
+        isReviewed = false;
+      });
     }
 
     print("Review : $review");
@@ -314,60 +321,140 @@ class _DescriptionState extends State<Description> {
                             SizedBox(
                               height: 25,
                             ),
-                            TextField(
-                              focusNode: focusNode,
-                              controller: reviewController,
-                              maxLines: 2,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
+                            !isReviewed
+                                ? TextField(
+                                    focusNode: focusNode,
+                                    controller: reviewController,
+                                    maxLines: 2,
+                                    decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10),
+                                          ),
+                                          borderSide: BorderSide(
+                                              color: configBloc.darkOn
+                                                  ? Colors.white
+                                                  : Colors.black)),
+                                      labelText: "Write a Review",
+                                      labelStyle: TextStyle(
+                                          color: configBloc.darkOn
+                                              ? Colors.white
+                                              : Colors.black),
                                     ),
-                                    borderSide: BorderSide(
-                                        color: configBloc.darkOn
-                                            ? Colors.white
-                                            : Colors.black)),
-                                labelText: "Write a Review",
-                                labelStyle: TextStyle(
-                                    color: configBloc.darkOn
-                                        ? Colors.white
-                                        : Colors.black),
-                              ),
+                                  )
+                                : null,
+                            !isReviewed ? SizedBox(height: 10) : null,
+                            !isReviewed
+                                ? Align(
+                                    alignment: Alignment.center,
+                                    child: FlatButton(
+                                      onPressed: () {
+                                        String review = reviewController.text
+                                            .toString()
+                                            .trim();
+                                        if (review != "" && id != "") {
+                                          FirebaseDatabase.instance
+                                              .reference()
+                                              .child("Hospitals")
+                                              .child("${hospital.index}")
+                                              .child("$id")
+                                              .update({"review": review});
+                                          Fluttertoast.showToast(
+                                              msg: "Review submitted",
+                                              gravity: ToastGravity.BOTTOM,
+                                              toastLength: Toast.LENGTH_LONG);
+                                          setState(() {
+                                            isReviewed = true;
+                                          });
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Review field can't be blank or Please Login",
+                                              gravity: ToastGravity.BOTTOM,
+                                              toastLength: Toast.LENGTH_LONG);
+                                        }
+                                        FocusScope.of(context)
+                                            .requestFocus(new FocusNode());
+                                      },
+                                      child: Text(
+                                        "Submit",
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                    ),
+                                  )
+                                : null,
+                            SizedBox(
+                              height: 10,
                             ),
-                            SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.center,
-                              child: FlatButton(
-                                  onPressed: () {
-                                    String review =
-                                        reviewController.text.toString().trim();
-                                    if (review != "" && id != "") {
-                                      FirebaseDatabase.instance
-                                          .reference()
-                                          .child("Hospitals")
-                                          .child("${hospital.index}")
-                                          .child("$id")
-                                          .update({"review": review});
-                                      Fluttertoast.showToast(
-                                          msg: "Review submitted",
-                                          gravity: ToastGravity.BOTTOM,
-                                          toastLength: Toast.LENGTH_LONG);
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "Review field can't be blank or Please Login",
-                                          gravity: ToastGravity.BOTTOM,
-                                          toastLength: Toast.LENGTH_LONG);
-                                    }
-                                    FocusScope.of(context)
-                                        .requestFocus(new FocusNode());
-                                  },
-                                  child: Text(
-                                    "Submit",
-                                    style: TextStyle(color: Colors.blue[300]),
-                                  )),
+                            Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.rate_review,
+                                  color: Colors.blue,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Reviews",
+                                  style: TextStyle(
+                                    fontSize: ScreenUtil()
+                                        .setSp(35, allowFontScalingSelf: true),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            isReviewed
+                                ? ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    leading: CircleAvatar(
+                                      child: Icon(
+                                        FontAwesomeIcons.user,
+                                        size: 16,
+                                      ),
+                                    ),
+                                    title: Text(reviewController.text),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () {
+                                        setState(() {
+                                          isReviewed = false;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                : null,
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: CircleAvatar(
+                                child: Icon(
+                                  FontAwesomeIcons.user,
+                                  size: 16,
+                                ),
+                              ),
+                              title: Text("great hospital"),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: CircleAvatar(
+                                child: Icon(
+                                  FontAwesomeIcons.user,
+                                  size: 16,
+                                ),
+                              ),
+                              title: Text("well experienced doctors"),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: CircleAvatar(
+                                child: Icon(
+                                  FontAwesomeIcons.user,
+                                  size: 16,
+                                ),
+                              ),
+                              title: Text("decent staff"),
                             )
-                          ],
+                          ].where((child) => child != null).toList(),
                         ),
                       ),
                     ],
